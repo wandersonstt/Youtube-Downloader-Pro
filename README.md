@@ -1,7 +1,6 @@
 🚀 Youtube Downloader Pro
 Uma ferramenta robusta, moderna e completa para baixar vídeos e playlists do YouTube em alta qualidade (até 4K) ou converter para áudio (MP3). Desenvolvido em C# com foco em performance e experiência do usuário.
 
-(Substitua este link por um print real do seu programa)
 
 ✨ Funcionalidades Principais
 📺 Suporte a Altíssima Qualidade: Baixe vídeos em 1080p, 1440p (2K) e 2160p (4K) com áudio e vídeo sincronizados.
