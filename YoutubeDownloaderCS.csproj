@@ -6,8 +6,8 @@
     <Nullable>enable</Nullable>
     <UseWindowsForms>true</UseWindowsForms>
     <ImplicitUsings>enable</ImplicitUsings>
-    <FileVersion>1.0.0.8</FileVersion>
-    <AssemblyVersion>1.0.0.8</AssemblyVersion>
+    <FileVersion>1.0.0.9</FileVersion>
+    <AssemblyVersion>1.0.0.9</AssemblyVersion>
     <ApplicationIcon>youtube.ico</ApplicationIcon>
     <PackageIcon>youtube.ico</PackageIcon>
   </PropertyGroup>
