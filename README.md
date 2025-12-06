@@ -75,4 +75,15 @@ Abra um Pull Request.
 📝 Licença
 Este projeto está sob a licença MIT. Veja o arquivo LICENSE para mais detalhes.
 
-<p align="center"> Desenvolvido com 💙 por <a href="https://github.com/wandersonstt">Wanderson</a> </p><img width="664" height="345" alt="Captura de tela 2025-12-04 151514" src="https://github.com/user-attachments/assets/bbfb249e-92bc-481f-b879-bc7ee75ff96d" />
+<p align="center"> Desenvolvido com 💙 por <a href="https://github.com/wandersonstt">Wanderson</a> 
+
+
+
+
+
+
+
+
+
+<img width="654" height="491" alt="Captura de tela 2025-12-06 114233" src="https://github.com/user-attachments/assets/850dfe38-823e-46f9-9fe4-15957716ab01" />
+
