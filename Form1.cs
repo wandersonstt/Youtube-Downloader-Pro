@@ -35,36 +35,33 @@ namespace YoutubeDownloaderCS
         private CancellationTokenSource? _cts;
         private string tituloVideoAtual = "";
 
-        // --- NOVA VARIÁVEL: Caixa de Histórico ---
-        private RichTextBox txtHistorico;
+        // CORREÇÃO CS8618: Tornamos anulável (?) para evitar aviso do construtor
+        private YoutubeExplode.Videos.Video? videoAtual;
+        private RichTextBox? txtHistorico;
 
         public Form1()
         {
             InitializeComponent();
-            ConfigurarInterfaceHistorico(); // Cria a caixa de histórico visualmente
+            ConfigurarInterfaceHistorico();
         }
 
-        // --- CONFIGURAÇÃO VISUAL DA CAIXA DE HISTÓRICO ---
         private void ConfigurarInterfaceHistorico()
         {
-            // Aumenta a altura da janela para caber o histórico
             this.Height = 500;
 
-            // Rótulo "Histórico"
             Label lblHist = new Label();
             lblHist.Text = "Histórico de Downloads:";
             lblHist.ForeColor = Color.DarkGray;
             lblHist.Font = new Font("Segoe UI", 9, FontStyle.Bold);
             lblHist.AutoSize = true;
-            lblHist.Location = new Point(12, 310); // Logo abaixo da barra de progresso
+            lblHist.Location = new Point(12, 310);
             this.Controls.Add(lblHist);
 
-            // A Caixa de Texto (RichTextBox)
             txtHistorico = new RichTextBox();
             txtHistorico.Location = new Point(12, 330);
-            txtHistorico.Size = new Size(this.ClientSize.Width - 24, 120); // Largura total menos margens
-            txtHistorico.BackColor = Color.FromArgb(40, 40, 40); // Fundo escuro
-            txtHistorico.ForeColor = Color.LimeGreen; // Texto verde estilo terminal
+            txtHistorico.Size = new Size(this.ClientSize.Width - 24, 120);
+            txtHistorico.BackColor = Color.FromArgb(40, 40, 40);
+            txtHistorico.ForeColor = Color.LimeGreen;
             txtHistorico.Font = new Font("Consolas", 9);
             txtHistorico.ReadOnly = true;
             txtHistorico.BorderStyle = BorderStyle.None;
@@ -72,9 +69,11 @@ namespace YoutubeDownloaderCS
             this.Controls.Add(txtHistorico);
         }
 
-        // --- FUNÇÃO PARA ADICIONAR TEXTO AO HISTÓRICO ---
         private void AdicionarHistorico(string status, string nome)
         {
+            // Segurança: Se a caixa de texto não foi criada, sai do método
+            if (txtHistorico == null) return;
+
             if (txtHistorico.InvokeRequired)
             {
                 txtHistorico.Invoke(new Action(() => AdicionarHistorico(status, nome)));
@@ -84,7 +83,7 @@ namespace YoutubeDownloaderCS
             string hora = DateTime.Now.ToString("HH:mm:ss");
             string linha = $"[{hora}] {status}: {nome}\n";
             txtHistorico.AppendText(linha);
-            txtHistorico.ScrollToCaret(); // Rola para o final
+            txtHistorico.ScrollToCaret();
         }
 
         protected override async void OnLoad(EventArgs e)
@@ -261,6 +260,8 @@ namespace YoutubeDownloaderCS
                 }
 
                 var video = await youtube.Videos.GetAsync(url);
+                videoAtual = video; // Guardamos o vídeo para usar a ID na capa
+
                 picThumbnail.LoadAsync($"https://img.youtube.com/vi/{video.Id}/hqdefault.jpg");
                 tituloVideoAtual = video.Title;
                 lblStatus.Text = $"Vídeo: {video.Title}";
@@ -279,8 +280,58 @@ namespace YoutubeDownloaderCS
             finally { TravarInterface(false); loading.Close(); }
         }
 
+        private async Task AdicionarCapa(string caminhoAudio, string videoId)
+        {
+            string caminhoImagem = Path.ChangeExtension(caminhoAudio, ".jpg");
+            string caminhoTemp = Path.ChangeExtension(caminhoAudio, ".temp.mp3");
+
+            try
+            {
+                var thumbUrl = $"https://img.youtube.com/vi/{videoId}/hqdefault.jpg";
+                using (var client = new HttpClient())
+                {
+                    var bytes = await client.GetByteArrayAsync(thumbUrl);
+                    await File.WriteAllBytesAsync(caminhoImagem, bytes);
+                }
+
+                string ffmpegPath = Path.Combine(Environment.CurrentDirectory, "ffmpeg.exe");
+
+                string args = $"-i \"{caminhoAudio}\" -i \"{caminhoImagem}\" -map 0 -map 1 -c copy -id3v2_version 3 -metadata:s:v title=\"Album cover\" -metadata:s:v comment=\"Cover (front)\" -y \"{caminhoTemp}\"";
+
+                var startInfo = new ProcessStartInfo
+                {
+                    FileName = ffmpegPath,
+                    Arguments = args,
+                    UseShellExecute = false,
+                    CreateNoWindow = true,
+                    RedirectStandardOutput = true,
+                    RedirectStandardError = true
+                };
+
+                using (var process = Process.Start(startInfo))
+                {
+                    await process.WaitForExitAsync();
+                }
+
+                if (File.Exists(caminhoTemp))
+                {
+                    File.Delete(caminhoAudio);
+                    File.Move(caminhoTemp, caminhoAudio);
+                }
+            }
+            catch (Exception ex)
+            {
+                Debug.WriteLine("Erro ao adicionar capa: " + ex.Message);
+            }
+            finally
+            {
+                if (File.Exists(caminhoImagem)) File.Delete(caminhoImagem);
+            }
+        }
+
         private async void btnBaixar_Click(object sender, EventArgs e)
         {
+            // CORREÇÃO CS8602: Verificamos se SelectedItem é nulo antes de prosseguir
             if (cmbQualidade.SelectedItem == null) return;
             OpcaoDownload opcao = (OpcaoDownload)cmbQualidade.SelectedItem!;
 
@@ -302,7 +353,7 @@ namespace YoutubeDownloaderCS
                         try
                         {
                             await Task.Run(() => BaixarViaYtDlp(txtUrl.Text, saveFileDialog1.FileName));
-                            AdicionarHistorico("SUCESSO (Uni)", Path.GetFileName(saveFileDialog1.FileName)); // LOG
+                            AdicionarHistorico("SUCESSO (Uni)", Path.GetFileName(saveFileDialog1.FileName));
                             MessageBox.Show("Download Concluído!");
                         }
                         catch (Exception ex)
@@ -318,10 +369,17 @@ namespace YoutubeDownloaderCS
                 // 2. MODO PLAYLIST
                 if (modoPlaylist)
                 {
+                    // CORREÇÃO CS8602: Validamos se listaVideosPlaylist existe
+                    if (listaVideosPlaylist == null || listaVideosPlaylist.Count == 0)
+                    {
+                        MessageBox.Show("Erro: Playlist vazia ou não carregada.");
+                        return;
+                    }
+
                     if (folderBrowserDialog1.ShowDialog() == DialogResult.OK)
                     {
                         string pasta = folderBrowserDialog1.SelectedPath;
-                        int total = listaVideosPlaylist!.Count, atual = 0;
+                        int total = listaVideosPlaylist.Count, atual = 0;
                         AdicionarHistorico("INÍCIO", $"Playlist: {tituloVideoAtual}");
 
                         foreach (var vid in listaVideosPlaylist)
@@ -338,7 +396,12 @@ namespace YoutubeDownloaderCS
                                 if (opcao.EhAudio)
                                 {
                                     var sInfo = man.GetAudioOnlyStreams().GetWithHighestBitrate();
-                                    if (sInfo != null) await youtube.Videos.Streams.DownloadAsync(sInfo, path + ".mp3", null, token);
+                                    if (sInfo != null)
+                                    {
+                                        string caminhoFinal = path + ".mp3";
+                                        await youtube.Videos.DownloadAsync(new[] { sInfo }, new ConversionRequestBuilder(caminhoFinal).Build(), null, token);
+                                        await AdicionarCapa(caminhoFinal, vid.Id);
+                                    }
                                 }
                                 else
                                 {
@@ -352,7 +415,7 @@ namespace YoutubeDownloaderCS
                                 }
                                 progressBar1.Value = (int)((double)atual / total * 100);
                                 lblPorcentagem.Text = $"{progressBar1.Value}%";
-                                AdicionarHistorico("OK", vid.Title); // LOG CADA VÍDEO
+                                AdicionarHistorico("OK", vid.Title);
                             }
                             catch { AdicionarHistorico("FALHA", vid.Title); continue; }
                         }
@@ -372,15 +435,35 @@ namespace YoutubeDownloaderCS
                         var prog = new Progress<double>(p => { progressBar1.Value = Math.Min((int)(p * 100), 100); lblPorcentagem.Text = $"{progressBar1.Value}%"; });
 
                         if (opcao.EhAudio)
-                            await youtube.Videos.Streams.DownloadAsync(opcao.Stream!, saveFileDialog1.FileName, prog, token);
+                        {
+                            if (opcao.Stream != null)
+                            {
+                                await youtube.Videos.DownloadAsync(new[] { opcao.Stream }, new ConversionRequestBuilder(saveFileDialog1.FileName).Build(), prog, token);
+
+                                lblStatus.Text = "A adicionar capa...";
+                                // CORREÇÃO CS8602: Garantimos que videoAtual não é nulo
+                                if (videoAtual != null)
+                                {
+                                    await AdicionarCapa(saveFileDialog1.FileName, videoAtual.Id);
+                                }
+                            }
+                        }
                         else
                         {
-                            var aud = streamManifestAtual!.GetAudioOnlyStreams().GetWithHighestBitrate();
-                            var vid = (IVideoStreamInfo)opcao.Stream!;
-                            var streamInfos = new IStreamInfo[] { vid, aud };
-                            await youtube.Videos.DownloadAsync(streamInfos, new ConversionRequestBuilder(saveFileDialog1.FileName).Build(), prog, token);
+                            // CORREÇÃO CS8602: Verificação do manifesto e stream
+                            if (streamManifestAtual != null && opcao.Stream != null)
+                            {
+                                var aud = streamManifestAtual.GetAudioOnlyStreams().GetWithHighestBitrate();
+                                var vid = (IVideoStreamInfo)opcao.Stream;
+
+                                if (aud != null)
+                                {
+                                    var streamInfos = new IStreamInfo[] { vid, aud };
+                                    await youtube.Videos.DownloadAsync(streamInfos, new ConversionRequestBuilder(saveFileDialog1.FileName).Build(), prog, token);
+                                }
+                            }
                         }
-                        AdicionarHistorico("SUCESSO", tituloVideoAtual); // LOG
+                        AdicionarHistorico("SUCESSO", tituloVideoAtual);
                     }
                 }
 
@@ -394,7 +477,7 @@ namespace YoutubeDownloaderCS
             {
                 lblStatus.Text = "Cancelado.";
                 progressBar1.Value = 0;
-                AdicionarHistorico("CANCELADO", "Pelo usuário");
+                AdicionarHistorico("CANCELADO", "Pelo utilizador");
             }
             catch (Exception ex)
             {
