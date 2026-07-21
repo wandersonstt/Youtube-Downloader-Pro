@@ -1,0 +1,18 @@
+# Ignorar pastas de compilação (onde ficam os executáveis pesados)
+[Bb]in/
+[Oo]bj/
+
+# Ignorar arquivos temporários do Visual Studio
+.vs/
+*.user
+
+# Ignorar o executável e o ffmpeg se estiverem na raiz
+*.exe
+*.dll
+ffmpeg.exe
+ffmpeg.zip
+
+# Ignorar arquivos compactados
+*.zip
+*.7z
+*.rar
