@@ -190,6 +190,7 @@
             FormBorderStyle = FormBorderStyle.FixedSingle;
             MaximizeBox = false;
             Name = "Form1";
+            Load += Form1_Load;
             ((System.ComponentModel.ISupportInitialize)picThumbnail).EndInit();
             ResumeLayout(false);
             PerformLayout();

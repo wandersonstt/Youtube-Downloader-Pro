@@ -117,137 +117,91 @@
   <resheader name="writer">
     <value>System.Resources.ResXResourceWriter, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
   </resheader>
-  <assembly alias="System.Drawing" name="System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a" />
-  <data name="btnSobre.Size" type="System.Drawing.Size, System.Drawing">
-    <value>30, 23</value>
-  </data>
-  <data name="&gt;&gt;btnCancelar.Name" xml:space="preserve">
-    <value>btnCancelar</value>
-  </data>
-  <data name="&gt;&gt;btnBuscar.Type" xml:space="preserve">
-    <value>System.Windows.Forms.Button, System.Windows.Forms, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
-  </data>
-  <assembly alias="mscorlib" name="mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089" />
-  <data name="btnCancelar.TabIndex" type="System.Int32, mscorlib">
-    <value>11</value>
-  </data>
-  <data name="&gt;&gt;btnSobre.Name" xml:space="preserve">
-    <value>btnSobre</value>
-  </data>
-  <data name="&gt;&gt;lblStatus.Type" xml:space="preserve">
-    <value>System.Windows.Forms.Label, System.Windows.Forms, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
-  </data>
-  <data name="&gt;&gt;lblPorcentagem.Parent" xml:space="preserve">
-    <value>$this</value>
-  </data>
-  <data name="btnAtualizar.Size" type="System.Drawing.Size, System.Drawing">
-    <value>120, 23</value>
-  </data>
-  <data name="&gt;&gt;btnAtualizar.Name" xml:space="preserve">
-    <value>btnAtualizar</value>
-  </data>
-  <data name="progressBar1.TabIndex" type="System.Int32, mscorlib">
-    <value>3</value>
-  </data>
-  <data name="picThumbnail.Size" type="System.Drawing.Size, System.Drawing">
-    <value>320, 180</value>
-  </data>
-  <data name="rbVideo.Location" type="System.Drawing.Point, System.Drawing">
-    <value>15, 22</value>
-  </data>
-  <data name="&gt;&gt;btnColar.Type" xml:space="preserve">
-    <value>System.Windows.Forms.Button, System.Windows.Forms, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
-  </data>
-  <assembly alias="System.Windows.Forms" name="System.Windows.Forms, Culture=neutral, PublicKeyToken=b77a5c561934e089" />
-  <data name="picThumbnail.SizeMode" type="System.Windows.Forms.PictureBoxSizeMode, System.Windows.Forms">
-    <value>Zoom</value>
-  </data>
-  <data name="&gt;&gt;txtUrl.Parent" xml:space="preserve">
-    <value>$this</value>
-  </data>
-  <data name="btnSobre.Location" type="System.Drawing.Point, System.Drawing">
-    <value>558, 246</value>
-  </data>
-  <data name="&gt;&gt;progressBar1.ZOrder" xml:space="preserve">
-    <value>3</value>
-  </data>
-  <data name="&gt;&gt;btnAtualizar.Type" xml:space="preserve">
-    <value>System.Windows.Forms.Button, System.Windows.Forms, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
-  </data>
-  <data name="&gt;&gt;saveFileDialog1.Name" xml:space="preserve">
-    <value>saveFileDialog1</value>
-  </data>
-  <data name="btnColar.Text" xml:space="preserve">
-    <value>Colar</value>
-  </data>
-  <data name="lblPorcentagem.Text" xml:space="preserve">
-    <value>0%</value>
-  </data>
-  <data name="btnBaixar.Size" type="System.Drawing.Size, System.Drawing">
-    <value>109, 25</value>
-  </data>
-  <data name="rbAudio.Font" type="System.Drawing.Font, System.Drawing">
-    <value>Segoe UI, 10pt</value>
-  </data>
-  <data name="btnCancelar.Location" type="System.Drawing.Point, System.Drawing">
-    <value>318, 231</value>
-  </data>
-  <data name="rbVideo.TabIndex" type="System.Int32, mscorlib">
-    <value>0</value>
-  </data>
-  <data name="&gt;&gt;cmbQualidade.Parent" xml:space="preserve">
-    <value>$this</value>
-  </data>
-  <data name="groupBox1.TabIndex" type="System.Int32, mscorlib">
-    <value>4</value>
-  </data>
-  <data name="lblPorcentagem.Size" type="System.Drawing.Size, System.Drawing">
-    <value>24, 15</value>
-  </data>
-  <data name="&gt;&gt;rbAudio.Parent" xml:space="preserve">
-    <value>groupBox1</value>
-  </data>
-  <data name="$this.Text" xml:space="preserve">
-    <value>Youtube Downloader Pro</value>
-  </data>
-  <data name="&gt;&gt;btnBaixar.Parent" xml:space="preserve">
-    <value>$this</value>
-  </data>
-  <data name="&gt;&gt;btnSobre.Type" xml:space="preserve">
-    <value>System.Windows.Forms.Button, System.Windows.Forms, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
-  </data>
-  <data name="&gt;&gt;rbAudio.Name" xml:space="preserve">
-    <value>rbAudio</value>
-  </data>
-  <data name="&gt;&gt;$this.Name" xml:space="preserve">
-    <value>Form1</value>
-  </data>
-  <data name="&gt;&gt;groupBox1.Type" xml:space="preserve">
-    <value>System.Windows.Forms.GroupBox, System.Windows.Forms, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+  <data name="&gt;&gt;btnColar.ZOrder" xml:space="preserve">
+    <value>12</value>
   </data>
   <data name="&gt;&gt;groupBox1.ZOrder" xml:space="preserve">
     <value>5</value>
   </data>
+  <assembly alias="System.Drawing" name="System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a" />
+  <data name="btnBuscar.Location" type="System.Drawing.Point, System.Drawing">
+    <value>374, 27</value>
+  </data>
+  <assembly alias="mscorlib" name="mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089" />
+  <data name="btnAtualizar.TabIndex" type="System.Int32, mscorlib">
+    <value>8</value>
+  </data>
+  <data name="&gt;&gt;picThumbnail.Name" xml:space="preserve">
+    <value>picThumbnail</value>
+  </data>
+  <data name="&gt;&gt;progressBar1.ZOrder" xml:space="preserve">
+    <value>3</value>
+  </data>
+  <data name="&gt;&gt;folderBrowserDialog1.Name" xml:space="preserve">
+    <value>folderBrowserDialog1</value>
+  </data>
+  <data name="&gt;&gt;btnBaixar.Type" xml:space="preserve">
+    <value>System.Windows.Forms.Button, System.Windows.Forms, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+  </data>
+  <data name="groupBox1.Text" xml:space="preserve">
+    <value>Opções</value>
+  </data>
+  <data name="btnSobre.Text" xml:space="preserve">
+    <value>?</value>
+  </data>
+  <data name="txtUrl.Size" type="System.Drawing.Size, System.Drawing">
+    <value>380, 23</value>
+  </data>
+  <data name="&gt;&gt;cmbQualidade.Type" xml:space="preserve">
+    <value>System.Windows.Forms.ComboBox, System.Windows.Forms, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+  </data>
+  <data name="rbVideo.TabIndex" type="System.Int32, mscorlib">
+    <value>0</value>
+  </data>
+  <data name="&gt;&gt;btnBuscar.Type" xml:space="preserve">
+    <value>System.Windows.Forms.Button, System.Windows.Forms, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+  </data>
+  <data name="&gt;&gt;saveFileDialog1.Type" xml:space="preserve">
+    <value>System.Windows.Forms.SaveFileDialog, System.Windows.Forms, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+  </data>
+  <data name="btnBuscar.TabIndex" type="System.Int32, mscorlib">
+    <value>9</value>
+  </data>
+  <data name="&gt;&gt;rbVideo.Parent" xml:space="preserve">
+    <value>groupBox1</value>
+  </data>
+  <data name="rbAudio.AutoSize" type="System.Boolean, mscorlib">
+    <value>True</value>
+  </data>
+  <data name="txtUrl.TabIndex" type="System.Int32, mscorlib">
+    <value>0</value>
+  </data>
+  <data name="lblPorcentagem.Text" xml:space="preserve">
+    <value>0%</value>
+  </data>
+  <data name="&gt;&gt;btnBuscar.Parent" xml:space="preserve">
+    <value>$this</value>
+  </data>
+  <data name="&gt;&gt;btnBuscar.Name" xml:space="preserve">
+    <value>btnBuscar</value>
+  </data>
+  <data name="btnCancelar.Location" type="System.Drawing.Point, System.Drawing">
+    <value>318, 231</value>
+  </data>
+  <data name="&gt;&gt;btnCancelar.Parent" xml:space="preserve">
+    <value>$this</value>
+  </data>
   <data name="&gt;&gt;btnSobre.ZOrder" xml:space="preserve">
     <value>5</value>
   </data>
-  <data name="&gt;&gt;btnBuscar.ZOrder" xml:space="preserve">
-    <value>11</value>
+  <data name="lblStatus.Text" xml:space="preserve">
+    <value>Aguardando comando</value>
   </data>
-  <data name="&gt;&gt;txtUrl.Name" xml:space="preserve">
-    <value>txtUrl</value>
+  <data name="&gt;&gt;folderBrowserDialog1.Type" xml:space="preserve">
+    <value>System.Windows.Forms.FolderBrowserDialog, System.Windows.Forms, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
   </data>
-  <data name="&gt;&gt;txtUrl.Type" xml:space="preserve">
-    <value>System.Windows.Forms.TextBox, System.Windows.Forms, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
-  </data>
-  <data name="lblStatus.Size" type="System.Drawing.Size, System.Drawing">
-    <value>127, 15</value>
-  </data>
-  <data name="&gt;&gt;lblPorcentagem.Name" xml:space="preserve">
-    <value>lblPorcentagem</value>
-  </data>
-  <data name="&gt;&gt;groupBox1.Parent" xml:space="preserve">
-    <value>$this</value>
+  <data name="rbAudio.Size" type="System.Drawing.Size, System.Drawing">
+    <value>112, 23</value>
   </data>
   <data name="lblPorcentagem.TabIndex" type="System.Int32, mscorlib">
     <value>5</value>
@@ -255,80 +209,59 @@
   <data name="&gt;&gt;btnSobre.Parent" xml:space="preserve">
     <value>$this</value>
   </data>
-  <data name="&gt;&gt;lblStatus.ZOrder" xml:space="preserve">
-    <value>4</value>
-  </data>
-  <data name="&gt;&gt;btnAtualizar.ZOrder" xml:space="preserve">
-    <value>6</value>
-  </data>
-  <data name="&gt;&gt;btnBuscar.Parent" xml:space="preserve">
+  <data name="&gt;&gt;label1.Parent" xml:space="preserve">
     <value>$this</value>
   </data>
-  <data name="&gt;&gt;cmbQualidade.Name" xml:space="preserve">
-    <value>cmbQualidade</value>
-  </data>
-  <data name="&gt;&gt;groupBox1.Name" xml:space="preserve">
-    <value>groupBox1</value>
-  </data>
-  <data name="&gt;&gt;lblStatus.Parent" xml:space="preserve">
+  <data name="&gt;&gt;btnAtualizar.Parent" xml:space="preserve">
     <value>$this</value>
   </data>
-  <data name="rbAudio.Text" xml:space="preserve">
-    <value>Apenas Áudio</value>
+  <data name="&gt;&gt;progressBar1.Type" xml:space="preserve">
+    <value>System.Windows.Forms.ProgressBar, System.Windows.Forms, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
   </data>
-  <data name="rbVideo.Font" type="System.Drawing.Font, System.Drawing">
-    <value>Segoe UI, 10pt</value>
+  <data name="&gt;&gt;lblStatus.Type" xml:space="preserve">
+    <value>System.Windows.Forms.Label, System.Windows.Forms, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
   </data>
-  <data name="&gt;&gt;folderBrowserDialog1.Name" xml:space="preserve">
-    <value>folderBrowserDialog1</value>
+  <data name="&gt;&gt;lblPorcentagem.ZOrder" xml:space="preserve">
+    <value>2</value>
+  </data>
+  <data name="&gt;&gt;rbVideo.ZOrder" xml:space="preserve">
+    <value>1</value>
+  </data>
+  <data name="lblPorcentagem.Location" type="System.Drawing.Point, System.Drawing">
+    <value>548, 278</value>
+  </data>
+  <data name="&gt;&gt;txtUrl.Parent" xml:space="preserve">
+    <value>$this</value>
+  </data>
+  <data name="&gt;&gt;picThumbnail.Type" xml:space="preserve">
+    <value>System.Windows.Forms.PictureBox, System.Windows.Forms, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
   </data>
   <data name="btnAtualizar.Font" type="System.Drawing.Font, System.Drawing">
     <value>Segoe UI, 8pt</value>
   </data>
-  <data name="btnSobre.TabIndex" type="System.Int32, mscorlib">
-    <value>7</value>
+  <data name="&gt;&gt;rbVideo.Name" xml:space="preserve">
+    <value>rbVideo</value>
   </data>
-  <data name="$this.StartPosition" type="System.Windows.Forms.FormStartPosition, System.Windows.Forms">
-    <value>CenterScreen</value>
+  <data name="&gt;&gt;lblPorcentagem.Name" xml:space="preserve">
+    <value>lblPorcentagem</value>
   </data>
-  <data name="btnColar.Size" type="System.Drawing.Size, System.Drawing">
-    <value>75, 23</value>
+  <data name="rbAudio.Location" type="System.Drawing.Point, System.Drawing">
+    <value>15, 47</value>
   </data>
-  <data name="btnBaixar.Location" type="System.Drawing.Point, System.Drawing">
-    <value>479, 26</value>
+  <data name="&gt;&gt;label1.Name" xml:space="preserve">
+    <value>label1</value>
   </data>
-  <data name="cmbQualidade.TabIndex" type="System.Int32, mscorlib">
-    <value>10</value>
+  <data name="&gt;&gt;groupBox1.Name" xml:space="preserve">
+    <value>groupBox1</value>
   </data>
-  <data name="btnBaixar.Text" xml:space="preserve">
-    <value>BAIXAR AGORA</value>
+  <data name="btnColar.Text" xml:space="preserve">
+    <value>Colar</value>
   </data>
-  <data name="&gt;&gt;btnDoar.Type" xml:space="preserve">
-    <value>System.Windows.Forms.Button, System.Windows.Forms, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+  <data name="btnColar.TabIndex" type="System.Int32, mscorlib">
+    <value>1</value>
   </data>
-  <data name="cmbQualidade.Location" type="System.Drawing.Point, System.Drawing">
-    <value>318, 78</value>
-  </data>
-  <data name="btnSobre.Text" xml:space="preserve">
-    <value>?</value>
-  </data>
-  <data name="lblStatus.AutoSize" type="System.Boolean, mscorlib">
-    <value>True</value>
-  </data>
-  <data name="&gt;&gt;btnCancelar.Parent" xml:space="preserve">
+  <data name="&gt;&gt;lblStatus.Parent" xml:space="preserve">
     <value>$this</value>
-  </data>
-  <data name="btnAtualizar.Text" xml:space="preserve">
-    <value>Verificar Atualização</value>
-  </data>
-  <data name="btnAtualizar.TabIndex" type="System.Int32, mscorlib">
-    <value>8</value>
-  </data>
-  <data name="&gt;&gt;btnBaixar.ZOrder" xml:space="preserve">
-    <value>10</value>
-  </data>
-  <data name="&gt;&gt;lblPorcentagem.Type" xml:space="preserve">
-    <value>System.Windows.Forms.Label, System.Windows.Forms, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
   </data>
   <data name="$this.Icon" type="System.Drawing.Icon, System.Drawing" mimetype="application/x-microsoft.net.object.bytearray.base64">
     <value>
@@ -519,238 +452,305 @@
         CIIgCIIgCIIgCIIgCIIgCIIgiILE/wPvfauj/p66RwAAAABJRU5ErkJggg==
 </value>
   </data>
-  <data name="lblStatus.Location" type="System.Drawing.Point, System.Drawing">
-    <value>12, 255</value>
-  </data>
-  <data name="picThumbnail.TabIndex" type="System.Int32, mscorlib">
-    <value>6</value>
-  </data>
-  <data name="btnBaixar.Font" type="System.Drawing.Font, System.Drawing">
-    <value>Segoe UI, 9pt, style=Bold</value>
-  </data>
-  <data name="btnBuscar.TabIndex" type="System.Int32, mscorlib">
-    <value>9</value>
-  </data>
-  <data name="&gt;&gt;btnDoar.Name" xml:space="preserve">
-    <value>btnDoar</value>
-  </data>
-  <data name="rbVideo.AutoSize" type="System.Boolean, mscorlib">
-    <value>True</value>
-  </data>
-  <data name="&gt;&gt;progressBar1.Parent" xml:space="preserve">
-    <value>$this</value>
-  </data>
-  <data name="rbAudio.TabIndex" type="System.Int32, mscorlib">
-    <value>1</value>
-  </data>
-  <data name="&gt;&gt;btnColar.Parent" xml:space="preserve">
-    <value>$this</value>
-  </data>
-  <data name="groupBox1.Text" xml:space="preserve">
-    <value>Opções</value>
-  </data>
-  <data name="&gt;&gt;picThumbnail.Type" xml:space="preserve">
-    <value>System.Windows.Forms.PictureBox, System.Windows.Forms, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
-  </data>
-  <data name="&gt;&gt;btnCancelar.ZOrder" xml:space="preserve">
-    <value>1</value>
-  </data>
-  <data name="btnBaixar.TabIndex" type="System.Int32, mscorlib">
-    <value>2</value>
-  </data>
-  <data name="&gt;&gt;lblPorcentagem.ZOrder" xml:space="preserve">
-    <value>2</value>
-  </data>
-  <data name="groupBox1.Size" type="System.Drawing.Size, System.Drawing">
-    <value>243, 80</value>
-  </data>
-  <data name="&gt;&gt;rbVideo.Parent" xml:space="preserve">
-    <value>groupBox1</value>
-  </data>
-  <data name="groupBox1.Location" type="System.Drawing.Point, System.Drawing">
-    <value>345, 60</value>
-  </data>
-  <data name="&gt;&gt;btnBuscar.Name" xml:space="preserve">
-    <value>btnBuscar</value>
-  </data>
-  <data name="&gt;&gt;saveFileDialog1.Type" xml:space="preserve">
-    <value>System.Windows.Forms.SaveFileDialog, System.Windows.Forms, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
-  </data>
-  <data name="&gt;&gt;label1.Type" xml:space="preserve">
-    <value>System.Windows.Forms.Label, System.Windows.Forms, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
-  </data>
-  <data name="&gt;&gt;rbVideo.Name" xml:space="preserve">
-    <value>rbVideo</value>
-  </data>
-  <data name="&gt;&gt;rbVideo.Type" xml:space="preserve">
-    <value>System.Windows.Forms.RadioButton, System.Windows.Forms, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
-  </data>
-  <data name="&gt;&gt;label1.Name" xml:space="preserve">
-    <value>label1</value>
-  </data>
-  <data name="rbAudio.Size" type="System.Drawing.Size, System.Drawing">
-    <value>112, 23</value>
-  </data>
-  <data name="&gt;&gt;btnColar.Name" xml:space="preserve">
-    <value>btnColar</value>
-  </data>
-  <data name="&gt;&gt;btnColar.ZOrder" xml:space="preserve">
-    <value>12</value>
-  </data>
-  <data name="txtUrl.Size" type="System.Drawing.Size, System.Drawing">
-    <value>380, 23</value>
-  </data>
-  <data name="txtUrl.TabIndex" type="System.Int32, mscorlib">
-    <value>0</value>
-  </data>
-  <data name="&gt;&gt;btnAtualizar.Parent" xml:space="preserve">
-    <value>$this</value>
-  </data>
-  <data name="$this.ClientSize" type="System.Drawing.Size, System.Drawing">
-    <value>600, 315</value>
-  </data>
-  <data name="rbAudio.Location" type="System.Drawing.Point, System.Drawing">
-    <value>15, 47</value>
-  </data>
-  <data name="&gt;&gt;rbAudio.ZOrder" xml:space="preserve">
-    <value>0</value>
-  </data>
-  <data name="&gt;&gt;label1.ZOrder" xml:space="preserve">
-    <value>8</value>
-  </data>
-  <data name="&gt;&gt;btnBaixar.Name" xml:space="preserve">
-    <value>btnBaixar</value>
-  </data>
-  <data name="txtUrl.PlaceholderText" xml:space="preserve">
-    <value>Cole o link do YouTube aqui...</value>
-  </data>
-  <data name="&gt;&gt;picThumbnail.ZOrder" xml:space="preserve">
-    <value>9</value>
-  </data>
-  <data name="&gt;&gt;rbVideo.ZOrder" xml:space="preserve">
-    <value>1</value>
-  </data>
-  <data name="btnColar.Location" type="System.Drawing.Point, System.Drawing">
-    <value>398, 27</value>
-  </data>
-  <data name="&gt;&gt;folderBrowserDialog1.Type" xml:space="preserve">
-    <value>System.Windows.Forms.FolderBrowserDialog, System.Windows.Forms, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
-  </data>
-  <data name="&gt;&gt;btnCancelar.Type" xml:space="preserve">
-    <value>System.Windows.Forms.Button, System.Windows.Forms, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
-  </data>
-  <data name="rbVideo.Size" type="System.Drawing.Size, System.Drawing">
-    <value>103, 23</value>
-  </data>
-  <data name="&gt;&gt;cmbQualidade.ZOrder" xml:space="preserve">
-    <value>7</value>
-  </data>
-  <data name="&gt;&gt;picThumbnail.Name" xml:space="preserve">
-    <value>picThumbnail</value>
-  </data>
-  <data name="lblStatus.TabIndex" type="System.Int32, mscorlib">
-    <value>2</value>
-  </data>
-  <data name="lblPorcentagem.AutoSize" type="System.Boolean, mscorlib">
-    <value>True</value>
-  </data>
-  <data name="&gt;&gt;txtUrl.ZOrder" xml:space="preserve">
-    <value>13</value>
-  </data>
-  <data name="label1.Location" type="System.Drawing.Point, System.Drawing">
-    <value>318, 60</value>
-  </data>
-  <data name="rbVideo.Text" xml:space="preserve">
-    <value>Vídeo (MP4)</value>
-  </data>
-  <data name="btnColar.TabIndex" type="System.Int32, mscorlib">
-    <value>1</value>
-  </data>
-  <data name="&gt;&gt;progressBar1.Type" xml:space="preserve">
-    <value>System.Windows.Forms.ProgressBar, System.Windows.Forms, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
-  </data>
-  <data name="picThumbnail.Location" type="System.Drawing.Point, System.Drawing">
-    <value>12, 60</value>
-  </data>
-  <data name="rbAudio.AutoSize" type="System.Boolean, mscorlib">
-    <value>True</value>
-  </data>
-  <data name="lblPorcentagem.Location" type="System.Drawing.Point, System.Drawing">
-    <value>548, 278</value>
-  </data>
-  <data name="$this.AutoScaleDimensions" type="System.Drawing.SizeF, System.Drawing">
-    <value>7, 15</value>
-  </data>
-  <data name="&gt;&gt;cmbQualidade.Type" xml:space="preserve">
-    <value>System.Windows.Forms.ComboBox, System.Windows.Forms, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
-  </data>
-  <data name="lblPorcentagem.Font" type="System.Drawing.Font, System.Drawing">
-    <value>Segoe UI, 9pt, style=Bold</value>
-  </data>
-  <data name="&gt;&gt;$this.Type" xml:space="preserve">
-    <value>System.Windows.Forms.Form, System.Windows.Forms, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
-  </data>
-  <data name="progressBar1.Size" type="System.Drawing.Size, System.Drawing">
-    <value>530, 25</value>
-  </data>
-  <data name="&gt;&gt;btnDoar.ZOrder" xml:space="preserve">
-    <value>0</value>
-  </data>
-  <data name="&gt;&gt;progressBar1.Name" xml:space="preserve">
-    <value>progressBar1</value>
-  </data>
-  <data name="txtUrl.Location" type="System.Drawing.Point, System.Drawing">
-    <value>12, 27</value>
-  </data>
-  <data name="btnBuscar.Location" type="System.Drawing.Point, System.Drawing">
-    <value>374, 27</value>
-  </data>
-  <data name="&gt;&gt;rbAudio.Type" xml:space="preserve">
-    <value>System.Windows.Forms.RadioButton, System.Windows.Forms, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
-  </data>
-  <data name="&gt;&gt;label1.Parent" xml:space="preserve">
-    <value>$this</value>
-  </data>
-  <data name="lblStatus.Text" xml:space="preserve">
-    <value>Aguardando comando</value>
-  </data>
-  <data name="btnDoar.Location" type="System.Drawing.Point, System.Drawing">
-    <value>606, 268</value>
-  </data>
-  <data name="label1.TabIndex" type="System.Int32, mscorlib">
-    <value>10</value>
-  </data>
-  <data name="&gt;&gt;lblStatus.Name" xml:space="preserve">
-    <value>lblStatus</value>
-  </data>
-  <data name="btnDoar.TabIndex" type="System.Int32, mscorlib">
-    <value>13</value>
-  </data>
-  <data name="progressBar1.Location" type="System.Drawing.Point, System.Drawing">
-    <value>12, 273</value>
-  </data>
-  <data name="&gt;&gt;picThumbnail.Parent" xml:space="preserve">
-    <value>$this</value>
-  </data>
-  <data name="&gt;&gt;btnBaixar.Type" xml:space="preserve">
-    <value>System.Windows.Forms.Button, System.Windows.Forms, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+  <data name="&gt;&gt;btnAtualizar.Name" xml:space="preserve">
+    <value>btnAtualizar</value>
+  </data>
+  <assembly alias="System.Windows.Forms" name="System.Windows.Forms, Culture=neutral, PublicKeyToken=b77a5c561934e089" />
+  <data name="$this.StartPosition" type="System.Windows.Forms.FormStartPosition, System.Windows.Forms">
+    <value>CenterScreen</value>
   </data>
   <data name="btnAtualizar.Location" type="System.Drawing.Point, System.Drawing">
     <value>432, 246</value>
   </data>
+  <data name="&gt;&gt;lblStatus.Name" xml:space="preserve">
+    <value>lblStatus</value>
+  </data>
   <data name="&gt;&gt;btnDoar.Parent" xml:space="preserve">
     <value>$this</value>
   </data>
-  <metadata name="$this.Localizable" type="System.Boolean, mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089">
+  <data name="btnBaixar.Size" type="System.Drawing.Size, System.Drawing">
+    <value>109, 25</value>
+  </data>
+  <data name="&gt;&gt;lblPorcentagem.Type" xml:space="preserve">
+    <value>System.Windows.Forms.Label, System.Windows.Forms, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+  </data>
+  <data name="&gt;&gt;progressBar1.Name" xml:space="preserve">
+    <value>progressBar1</value>
+  </data>
+  <data name="cmbQualidade.Location" type="System.Drawing.Point, System.Drawing">
+    <value>318, 78</value>
+  </data>
+  <data name="rbVideo.AutoSize" type="System.Boolean, mscorlib">
     <value>True</value>
-  </metadata>
-  <metadata name="$this.Language" type="System.Globalization.CultureInfo, System.Private.CoreLib, Culture=neutral, PublicKeyToken=7cec85d7bea7798e">
-    <value>pt-BR</value>
-  </metadata>
+  </data>
+  <data name="btnBaixar.Font" type="System.Drawing.Font, System.Drawing">
+    <value>Segoe UI, 9pt, style=Bold</value>
+  </data>
+  <data name="cmbQualidade.TabIndex" type="System.Int32, mscorlib">
+    <value>10</value>
+  </data>
+  <data name="lblPorcentagem.Font" type="System.Drawing.Font, System.Drawing">
+    <value>Segoe UI, 9pt, style=Bold</value>
+  </data>
+  <data name="$this.Text" xml:space="preserve">
+    <value>Youtube Downloader Pro</value>
+  </data>
+  <data name="&gt;&gt;btnCancelar.Type" xml:space="preserve">
+    <value>System.Windows.Forms.Button, System.Windows.Forms, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+  </data>
+  <data name="picThumbnail.Location" type="System.Drawing.Point, System.Drawing">
+    <value>12, 60</value>
+  </data>
+  <data name="&gt;&gt;saveFileDialog1.Name" xml:space="preserve">
+    <value>saveFileDialog1</value>
+  </data>
+  <data name="groupBox1.Size" type="System.Drawing.Size, System.Drawing">
+    <value>243, 80</value>
+  </data>
+  <data name="&gt;&gt;label1.ZOrder" xml:space="preserve">
+    <value>8</value>
+  </data>
+  <data name="btnDoar.Location" type="System.Drawing.Point, System.Drawing">
+    <value>606, 268</value>
+  </data>
+  <data name="&gt;&gt;btnSobre.Name" xml:space="preserve">
+    <value>btnSobre</value>
+  </data>
+  <data name="&gt;&gt;btnColar.Name" xml:space="preserve">
+    <value>btnColar</value>
+  </data>
+  <data name="rbAudio.Font" type="System.Drawing.Font, System.Drawing">
+    <value>Segoe UI, 10pt</value>
+  </data>
+  <data name="&gt;&gt;rbVideo.Type" xml:space="preserve">
+    <value>System.Windows.Forms.RadioButton, System.Windows.Forms, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+  </data>
+  <data name="&gt;&gt;label1.Type" xml:space="preserve">
+    <value>System.Windows.Forms.Label, System.Windows.Forms, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+  </data>
+  <data name="$this.AutoScaleDimensions" type="System.Drawing.SizeF, System.Drawing">
+    <value>7, 15</value>
+  </data>
+  <data name="lblPorcentagem.AutoSize" type="System.Boolean, mscorlib">
+    <value>True</value>
+  </data>
+  <data name="groupBox1.TabIndex" type="System.Int32, mscorlib">
+    <value>4</value>
+  </data>
+  <data name="btnSobre.Location" type="System.Drawing.Point, System.Drawing">
+    <value>558, 246</value>
+  </data>
+  <data name="groupBox1.Location" type="System.Drawing.Point, System.Drawing">
+    <value>345, 60</value>
+  </data>
+  <data name="txtUrl.Location" type="System.Drawing.Point, System.Drawing">
+    <value>12, 27</value>
+  </data>
+  <data name="&gt;&gt;btnColar.Parent" xml:space="preserve">
+    <value>$this</value>
+  </data>
+  <data name="progressBar1.Size" type="System.Drawing.Size, System.Drawing">
+    <value>530, 25</value>
+  </data>
+  <data name="&gt;&gt;$this.Name" xml:space="preserve">
+    <value>Form1</value>
+  </data>
+  <data name="&gt;&gt;btnDoar.ZOrder" xml:space="preserve">
+    <value>0</value>
+  </data>
+  <data name="rbVideo.Text" xml:space="preserve">
+    <value>Vídeo (MP4)</value>
+  </data>
+  <data name="btnAtualizar.Text" xml:space="preserve">
+    <value>Verificar Atualização</value>
+  </data>
+  <data name="rbVideo.Size" type="System.Drawing.Size, System.Drawing">
+    <value>103, 23</value>
+  </data>
+  <data name="&gt;&gt;btnAtualizar.Type" xml:space="preserve">
+    <value>System.Windows.Forms.Button, System.Windows.Forms, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+  </data>
+  <data name="&gt;&gt;btnCancelar.ZOrder" xml:space="preserve">
+    <value>1</value>
+  </data>
+  <data name="&gt;&gt;btnBaixar.Name" xml:space="preserve">
+    <value>btnBaixar</value>
+  </data>
+  <data name="&gt;&gt;cmbQualidade.Name" xml:space="preserve">
+    <value>cmbQualidade</value>
+  </data>
+  <data name="&gt;&gt;rbAudio.ZOrder" xml:space="preserve">
+    <value>0</value>
+  </data>
+  <data name="lblStatus.Size" type="System.Drawing.Size, System.Drawing">
+    <value>127, 15</value>
+  </data>
+  <data name="&gt;&gt;btnSobre.Type" xml:space="preserve">
+    <value>System.Windows.Forms.Button, System.Windows.Forms, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+  </data>
+  <data name="btnCancelar.TabIndex" type="System.Int32, mscorlib">
+    <value>11</value>
+  </data>
+  <data name="picThumbnail.TabIndex" type="System.Int32, mscorlib">
+    <value>6</value>
+  </data>
+  <data name="&gt;&gt;btnColar.Type" xml:space="preserve">
+    <value>System.Windows.Forms.Button, System.Windows.Forms, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+  </data>
+  <data name="btnBaixar.Location" type="System.Drawing.Point, System.Drawing">
+    <value>479, 26</value>
+  </data>
+  <data name="txtUrl.PlaceholderText" xml:space="preserve">
+    <value>Cole o link do YouTube aqui...</value>
+  </data>
+  <data name="rbVideo.Font" type="System.Drawing.Font, System.Drawing">
+    <value>Segoe UI, 10pt</value>
+  </data>
+  <data name="&gt;&gt;txtUrl.Type" xml:space="preserve">
+    <value>System.Windows.Forms.TextBox, System.Windows.Forms, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+  </data>
+  <data name="btnColar.Location" type="System.Drawing.Point, System.Drawing">
+    <value>398, 27</value>
+  </data>
+  <data name="btnBaixar.Text" xml:space="preserve">
+    <value>BAIXAR AGORA</value>
+  </data>
+  <data name="&gt;&gt;btnBaixar.Parent" xml:space="preserve">
+    <value>$this</value>
+  </data>
+  <data name="btnSobre.Size" type="System.Drawing.Size, System.Drawing">
+    <value>30, 23</value>
+  </data>
+  <data name="&gt;&gt;btnAtualizar.ZOrder" xml:space="preserve">
+    <value>6</value>
+  </data>
+  <data name="&gt;&gt;txtUrl.ZOrder" xml:space="preserve">
+    <value>13</value>
+  </data>
+  <data name="picThumbnail.SizeMode" type="System.Windows.Forms.PictureBoxSizeMode, System.Windows.Forms">
+    <value>Zoom</value>
+  </data>
+  <data name="&gt;&gt;picThumbnail.ZOrder" xml:space="preserve">
+    <value>9</value>
+  </data>
+  <data name="progressBar1.TabIndex" type="System.Int32, mscorlib">
+    <value>3</value>
+  </data>
+  <data name="rbAudio.Text" xml:space="preserve">
+    <value>Apenas Áudio</value>
+  </data>
+  <data name="rbAudio.TabIndex" type="System.Int32, mscorlib">
+    <value>1</value>
+  </data>
+  <data name="&gt;&gt;picThumbnail.Parent" xml:space="preserve">
+    <value>$this</value>
+  </data>
+  <data name="&gt;&gt;rbAudio.Parent" xml:space="preserve">
+    <value>groupBox1</value>
+  </data>
+  <data name="btnSobre.TabIndex" type="System.Int32, mscorlib">
+    <value>7</value>
+  </data>
+  <data name="&gt;&gt;$this.Type" xml:space="preserve">
+    <value>System.Windows.Forms.Form, System.Windows.Forms, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+  </data>
+  <data name="label1.Location" type="System.Drawing.Point, System.Drawing">
+    <value>318, 60</value>
+  </data>
+  <data name="&gt;&gt;btnDoar.Name" xml:space="preserve">
+    <value>btnDoar</value>
+  </data>
+  <data name="$this.ClientSize" type="System.Drawing.Size, System.Drawing">
+    <value>600, 315</value>
+  </data>
+  <data name="&gt;&gt;rbAudio.Type" xml:space="preserve">
+    <value>System.Windows.Forms.RadioButton, System.Windows.Forms, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+  </data>
+  <data name="lblStatus.Location" type="System.Drawing.Point, System.Drawing">
+    <value>12, 255</value>
+  </data>
+  <data name="btnColar.Size" type="System.Drawing.Size, System.Drawing">
+    <value>75, 23</value>
+  </data>
+  <data name="lblStatus.TabIndex" type="System.Int32, mscorlib">
+    <value>2</value>
+  </data>
+  <data name="&gt;&gt;cmbQualidade.Parent" xml:space="preserve">
+    <value>$this</value>
+  </data>
+  <data name="&gt;&gt;lblStatus.ZOrder" xml:space="preserve">
+    <value>4</value>
+  </data>
+  <data name="&gt;&gt;cmbQualidade.ZOrder" xml:space="preserve">
+    <value>7</value>
+  </data>
+  <data name="btnAtualizar.Size" type="System.Drawing.Size, System.Drawing">
+    <value>120, 23</value>
+  </data>
+  <data name="&gt;&gt;txtUrl.Name" xml:space="preserve">
+    <value>txtUrl</value>
+  </data>
+  <data name="lblPorcentagem.Size" type="System.Drawing.Size, System.Drawing">
+    <value>24, 15</value>
+  </data>
+  <data name="&gt;&gt;groupBox1.Parent" xml:space="preserve">
+    <value>$this</value>
+  </data>
+  <data name="&gt;&gt;btnBaixar.ZOrder" xml:space="preserve">
+    <value>10</value>
+  </data>
+  <data name="btnDoar.TabIndex" type="System.Int32, mscorlib">
+    <value>13</value>
+  </data>
+  <data name="lblStatus.AutoSize" type="System.Boolean, mscorlib">
+    <value>True</value>
+  </data>
+  <data name="&gt;&gt;lblPorcentagem.Parent" xml:space="preserve">
+    <value>$this</value>
+  </data>
+  <data name="progressBar1.Location" type="System.Drawing.Point, System.Drawing">
+    <value>12, 273</value>
+  </data>
+  <data name="&gt;&gt;btnCancelar.Name" xml:space="preserve">
+    <value>btnCancelar</value>
+  </data>
+  <data name="btnBaixar.TabIndex" type="System.Int32, mscorlib">
+    <value>2</value>
+  </data>
+  <data name="&gt;&gt;btnBuscar.ZOrder" xml:space="preserve">
+    <value>11</value>
+  </data>
+  <data name="picThumbnail.Size" type="System.Drawing.Size, System.Drawing">
+    <value>320, 180</value>
+  </data>
+  <data name="&gt;&gt;groupBox1.Type" xml:space="preserve">
+    <value>System.Windows.Forms.GroupBox, System.Windows.Forms, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+  </data>
+  <data name="label1.TabIndex" type="System.Int32, mscorlib">
+    <value>10</value>
+  </data>
+  <data name="&gt;&gt;rbAudio.Name" xml:space="preserve">
+    <value>rbAudio</value>
+  </data>
+  <data name="rbVideo.Location" type="System.Drawing.Point, System.Drawing">
+    <value>15, 22</value>
+  </data>
+  <data name="&gt;&gt;btnDoar.Type" xml:space="preserve">
+    <value>System.Windows.Forms.Button, System.Windows.Forms, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+  </data>
+  <data name="&gt;&gt;progressBar1.Parent" xml:space="preserve">
+    <value>$this</value>
+  </data>
   <metadata name="saveFileDialog1.TrayLocation" type="System.Drawing.Point, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a">
     <value>184, 17</value>
   </metadata>
+  <metadata name="$this.Localizable" type="System.Boolean, mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089">
+    <value>True</value>
+  </metadata>
   <metadata name="folderBrowserDialog1.TrayLocation" type="System.Drawing.Point, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a">
     <value>17, 17</value>
+  </metadata>
+  <metadata name="$this.Language" type="System.Globalization.CultureInfo, System.Private.CoreLib, Culture=neutral, PublicKeyToken=7cec85d7bea7798e">
+    <value>pt-BR</value>
   </metadata>
 </root>

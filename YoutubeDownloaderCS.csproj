@@ -6,8 +6,8 @@
     <Nullable>enable</Nullable>
     <UseWindowsForms>true</UseWindowsForms>
     <ImplicitUsings>enable</ImplicitUsings>
-    <FileVersion>2.0.0.0</FileVersion>
-    <AssemblyVersion>2.0.0.0</AssemblyVersion>
+    <FileVersion>2.0.1.0</FileVersion>
+    <AssemblyVersion>2.0.1.0</AssemblyVersion>
     <ApplicationIcon>youtube.ico</ApplicationIcon>
     <PackageIcon>youtube.ico</PackageIcon>
   </PropertyGroup>
@@ -17,12 +17,12 @@
   </ItemGroup>
 
   <ItemGroup>
-    <PackageReference Include="AngleSharp" Version="1.4.0" />
-    <PackageReference Include="Autoupdater.NET.Official" Version="1.9.2" />
-    <PackageReference Include="CliWrap" Version="3.10.0" />
-    <PackageReference Include="Microsoft.Web.WebView2" Version="1.0.3800.47" />
-    <PackageReference Include="YoutubeExplode" Version="6.5.7" />
-    <PackageReference Include="YoutubeExplode.Converter" Version="6.5.7" />
+    <PackageReference Include="AngleSharp" Version="1.8.0-beta.603" />
+    <PackageReference Include="Autoupdater.NET.Official" Version="1.9.3" />
+    <PackageReference Include="CliWrap" Version="3.10.5" />
+    <PackageReference Include="Microsoft.Web.WebView2" Version="1.0.4181-prerelease" />
+    <PackageReference Include="YoutubeExplode" Version="6.6.1" />
+    <PackageReference Include="YoutubeExplode.Converter" Version="6.6.1" />
   </ItemGroup>
 
   <ItemGroup>

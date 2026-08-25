@@ -26,7 +26,7 @@ namespace YoutubeDownloaderCS
         // URLs
         private const string UrlXmlUpdate = "https://raw.githubusercontent.com/wandersonstt/Youtube-Downloader-Pro/refs/heads/main/update.xml";
         private const string UrlFFmpegZip = "https://github.com/BtbN/FFmpeg-Builds/releases/download/latest/ffmpeg-master-latest-win64-gpl.zip";
-        private const string UrlYtDlpExe = "https://github.com/yt-dlp/yt-dlp/releases/latest/download/yt-dlp.exe";
+        private const string UrlYtDlpExe = "https://github.com/yt-dlp/yt-dlp/releases/download/2026.08.19/yt-dlp.exe";
         private const string LinkLivePix = "https://livepix.gg/alho97";
 
         // Variáveis de controle
@@ -275,7 +275,23 @@ namespace YoutubeDownloaderCS
                 }
                 if (cmbQualidade.Items.Count > 0) { cmbQualidade.SelectedIndex = 0; btnBaixar.Enabled = true; }
             }
-            catch (Exception ex) { MessageBox.Show("Erro ao analisar: " + ex.Message); }
+            catch (Exception ex)
+            {
+                // ==========================================
+                // SOLUÇÃO 3: FALLBACK (PLANO B) ADICIONADO AQUI
+                // ==========================================
+                Debug.WriteLine("YoutubeExplode falhou: " + ex.Message);
+
+                tituloVideoAtual = "Vídeo (Modo Universal)";
+                lblStatus.Text = "Modo de compatibilidade ativado (yt-dlp)";
+                cmbQualidade.Items.Clear();
+                cmbQualidade.Items.Add(new OpcaoDownload { Nome = "Melhor Qualidade (Universal - yt-dlp)", IsGeneric = true });
+                cmbQualidade.SelectedIndex = 0;
+                btnBaixar.Enabled = true;
+
+                MessageBox.Show("Não foi possível analisar os formatos detalhados devido a uma restrição do YouTube.\nO download será realizado no modo Universal.",
+                                "Aviso", MessageBoxButtons.OK, MessageBoxIcon.Information);
+            }
             finally { TravarInterface(false); loading.Close(); }
         }
 
@@ -307,8 +323,6 @@ namespace YoutubeDownloaderCS
                     {
                         using (var stream = await response.Content.ReadAsStreamAsync())
                         {
-                            // Tenta carregar a imagem e salvar como JPG puro
-                            // Isso corrige o erro de formato WebP que trava o FFmpeg
                             try
                             {
                                 using (var img = Image.FromStream(stream))
@@ -601,6 +615,11 @@ namespace YoutubeDownloaderCS
             public int MaxAltura { get; set; } = 4320;
             public bool IsGeneric { get; set; } = false;
             public override string ToString() => Nome ?? "?";
+        }
+
+        private void Form1_Load(object sender, EventArgs e)
+        {
+
         }
     }
 
