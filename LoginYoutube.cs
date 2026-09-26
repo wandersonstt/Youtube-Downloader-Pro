@@ -65,10 +65,14 @@ namespace YoutubeDownloaderCS
         protected override async void OnLoad(EventArgs e)
         {
             base.OnLoad(e);
+
+            // Resolvido antes do try: se PastaPerfil lançasse dentro do catch, a exceção
+            // escaparia deste async void e derrubaria o processo sem aviso nenhum.
+            string perfil = PastaPerfil;
             try
             {
-                Directory.CreateDirectory(PastaPerfil);
-                var ambiente = await CoreWebView2Environment.CreateAsync(null, PastaPerfil);
+                Directory.CreateDirectory(perfil);
+                var ambiente = await CoreWebView2Environment.CreateAsync(null, perfil);
                 await navegador.EnsureCoreWebView2Async(ambiente);
 
                 // Se a sessão anterior ainda valer, fecha sozinha sem incomodar o usuário.
@@ -77,7 +81,7 @@ namespace YoutubeDownloaderCS
             }
             catch (Exception ex)
             {
-                Logger.Erro($"Falha ao abrir a janela de login (WebView2). Perfil: {PastaPerfil}", ex);
+                Logger.Erro($"Falha ao abrir a janela de login (WebView2). Perfil: {perfil}", ex);
 
                 string detalhe;
                 try { detalhe = "Runtime do WebView2: " + CoreWebView2Environment.GetAvailableBrowserVersionString(); }

@@ -26,6 +26,10 @@ namespace YoutubeDownloaderCS
 
             // To customize application configuration such as set high DPI settings or default font,
             // see https://aka.ms/applicationconfiguration.
+            // Criada uma vez aqui para que ler Util.PastaDados nunca faça I/O depois.
+            try { Util.CriarPastaDados(); }
+            catch (Exception ex) { Logger.Erro("Não foi possível criar a pasta de dados " + Util.PastaDados, ex); }
+
             RegistrarDiagnostico();
 
             ApplicationConfiguration.Initialize();

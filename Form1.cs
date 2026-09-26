@@ -43,7 +43,110 @@ namespace YoutubeDownloaderCS
         public Form1()
         {
             InitializeComponent();
+            AplicarTema();
             ConfigurarPainelInferior();
+        }
+
+        // O layout do designer vive no .resx com coordenadas fixas e espaçamentos irregulares.
+        // Reposicionar aqui dá uma grade consistente e sobrevive a mudanças de DPI.
+        private void AplicarTema()
+        {
+            const int M = 16;          // margem externa
+            const int G = 8;           // espaço entre controles vizinhos
+            const int AlturaLinha = 38;
+
+            BackColor = Tema.Fundo;
+            ForeColor = Tema.Texto;
+            Font = Tema.Corpo;
+            ClientSize = new Size(700, ClientSize.Height);
+            int L = ClientSize.Width;
+
+            // --- Linha 1: campo de URL + ações ---
+            btnBuscar.Text = "Analisar";
+            btnBuscar.SetBounds(L - M - 112, M, 112, AlturaLinha);
+            Tema.EstilizarBotao(btnBuscar, Tema.Estilo.Secundario);
+
+            btnColar.Text = "Colar";
+            btnColar.SetBounds(btnBuscar.Left - G - 84, M, 84, AlturaLinha);
+            Tema.EstilizarBotao(btnColar, Tema.Estilo.Secundario);
+
+            // O TextBox ignora Height quando tem borda própria; um painel hospeda a borda
+            // arredondada e o campo fica centralizado dentro dele.
+            var campo = new Panel
+            {
+                BackColor = Tema.Superficie,
+                Location = new Point(M, M),
+                Size = new Size(btnColar.Left - G - M, AlturaLinha)
+            };
+            Tema.Arredondar(campo, 8);
+
+            Controls.Remove(txtUrl);
+            txtUrl.BorderStyle = BorderStyle.None;
+            txtUrl.BackColor = Tema.Superficie;
+            txtUrl.ForeColor = Tema.Texto;
+            txtUrl.Font = Tema.Corpo;
+            txtUrl.PlaceholderText = "Cole aqui o link do vídeo ou da playlist";
+            txtUrl.SetBounds(12, (AlturaLinha - txtUrl.PreferredHeight) / 2 + 1, campo.Width - 24, txtUrl.PreferredHeight);
+            txtUrl.Anchor = AnchorStyles.Left | AnchorStyles.Right | AnchorStyles.Top;
+            campo.Controls.Add(txtUrl);
+            Controls.Add(campo);
+
+            // --- Linha 2: miniatura à esquerda, opções à direita ---
+            int y2 = M + AlturaLinha + M;
+            picThumbnail.SetBounds(M, y2, 336, 189);
+            picThumbnail.BackColor = Color.FromArgb(12, 12, 14);
+            picThumbnail.BorderStyle = BorderStyle.None;
+            picThumbnail.SizeMode = PictureBoxSizeMode.Zoom;
+            Tema.Arredondar(picThumbnail, 10);
+
+            int xDir = picThumbnail.Right + M;
+            int wDir = L - M - xDir;
+
+            label1.Text = "OPÇÕES DE DOWNLOAD";
+            label1.Font = new Font("Segoe UI Semibold", 8f);
+            label1.ForeColor = Tema.TextoFraco;
+            label1.SetBounds(xDir, y2 + 2, wDir, 16);
+
+            cmbQualidade.SetBounds(xDir, y2 + 24, wDir, 30);
+
+            btnBaixar.Text = "Baixar";
+            btnBaixar.SetBounds(xDir, y2 + 66, wDir, 46);
+            btnBaixar.Font = new Font("Segoe UI Semibold", 11f);
+            Tema.EstilizarBotao(btnBaixar, Tema.Estilo.Primario, 10);
+
+            int yAcoes = y2 + 126;
+            btnAtualizar.Text = "Verificar atualizações";
+            btnAtualizar.SetBounds(xDir, yAcoes, wDir - 2 * (34 + G), 32);
+            Tema.EstilizarBotao(btnAtualizar, Tema.Estilo.Fantasma);
+
+            btnSobre.Text = "?";
+            btnSobre.SetBounds(btnAtualizar.Right + G, yAcoes, 34, 32);
+            Tema.EstilizarBotao(btnSobre, Tema.Estilo.Fantasma);
+
+            btnDoar.SetBounds(btnSobre.Right + G, yAcoes, 34, 32);
+            Tema.EstilizarBotao(btnDoar, Tema.Estilo.Aviso);
+
+            // --- Linha 3: status, porcentagem, progresso e cancelar ---
+            int y3 = picThumbnail.Bottom + M + 4;
+            lblStatus.SetBounds(M, y3, L - M - 180, 20);
+            lblStatus.ForeColor = Tema.TextoFraco;
+            lblStatus.Font = Tema.Rotulo;
+            lblStatus.AutoSize = false;
+            lblStatus.TextAlign = ContentAlignment.MiddleLeft;
+
+            btnCancelar.Text = "Cancelar";
+            btnCancelar.SetBounds(L - M - 120, y3 + 2, 120, 34);
+            Tema.EstilizarBotao(btnCancelar, Tema.Estilo.Fantasma);
+            btnCancelar.ForeColor = Tema.Perigo;
+            btnCancelar.FlatAppearance.MouseOverBackColor = Color.FromArgb(60, 26, 26);
+
+            lblPorcentagem.SetBounds(btnCancelar.Left - G - 70, y3 - 2, 70, 26);
+            lblPorcentagem.AutoSize = false;
+            lblPorcentagem.TextAlign = ContentAlignment.MiddleRight;
+            lblPorcentagem.Font = Tema.Numero;
+            lblPorcentagem.ForeColor = Tema.Texto;
+
+            progressBar1.SetBounds(M, y3 + 28, btnCancelar.Left - G - M, 8);
         }
 
         private void ConfigurarPainelInferior()
@@ -58,19 +161,19 @@ namespace YoutubeDownloaderCS
             const int alturaPainel = 160;
             this.ClientSize = new Size(this.ClientSize.Width, baseY + alturaPainel + 12);
 
-            tabsInferior = new TabControl
+            tabsInferior = new AbasEscuras
             {
-                Location = new Point(12, baseY),
-                Size = new Size(this.ClientSize.Width - 24, alturaPainel),
+                Location = new Point(16, baseY),
+                Size = new Size(this.ClientSize.Width - 32, alturaPainel),
                 Anchor = AnchorStyles.Top | AnchorStyles.Left | AnchorStyles.Right | AnchorStyles.Bottom
             };
 
-            var abaHistorico = new TabPage("Histórico") { BackColor = Color.FromArgb(40, 40, 40) };
-            txtHistorico = CriarCaixaTexto(Color.LimeGreen);
+            var abaHistorico = new TabPage("Histórico") { BackColor = Tema.Superficie, Padding = new Padding(6) };
+            txtHistorico = CriarCaixaTexto(Color.FromArgb(74, 222, 128));
             abaHistorico.Controls.Add(txtHistorico);
 
-            var abaLog = new TabPage("Log") { BackColor = Color.FromArgb(40, 40, 40) };
-            txtLog = CriarCaixaTexto(Color.Gainsboro);
+            var abaLog = new TabPage("Log") { BackColor = Tema.Superficie, Padding = new Padding(6) };
+            txtLog = CriarCaixaTexto(Tema.TextoFraco);
             var barraLog = CriarBarraBotoesLog();
             abaLog.Controls.Add(txtLog);
             abaLog.Controls.Add(barraLog);
@@ -84,9 +187,9 @@ namespace YoutubeDownloaderCS
         private static RichTextBox CriarCaixaTexto(Color corTexto) => new RichTextBox
         {
             Dock = DockStyle.Fill,
-            BackColor = Color.FromArgb(40, 40, 40),
+            BackColor = Tema.Superficie,
             ForeColor = corTexto,
-            Font = new Font("Consolas", 9),
+            Font = new Font("Cascadia Mono", 8.5f),
             ReadOnly = true,
             BorderStyle = BorderStyle.None,
             ScrollBars = RichTextBoxScrollBars.Vertical
@@ -94,27 +197,20 @@ namespace YoutubeDownloaderCS
 
         private Panel CriarBarraBotoesLog()
         {
-            var barra = new Panel { Dock = DockStyle.Bottom, Height = 30, BackColor = Color.FromArgb(40, 40, 40) };
+            var barra = new Panel { Dock = DockStyle.Bottom, Height = 34, BackColor = Tema.Superficie };
 
             Button CriarBotao(string texto, int x, EventHandler aoClicar)
             {
-                var b = new Button
-                {
-                    Text = texto,
-                    Location = new Point(x, 3),
-                    Size = new Size(96, 24),
-                    BackColor = Color.FromArgb(60, 60, 60),
-                    ForeColor = Color.WhiteSmoke,
-                    FlatStyle = FlatStyle.Flat
-                };
-                b.FlatAppearance.BorderSize = 0;
+                var b = new Button { Text = texto, Location = new Point(x, 4), Size = new Size(96, 26) };
+                Tema.EstilizarBotao(b, Tema.Estilo.Fantasma, 6);
+                b.Font = Tema.Rotulo;
                 b.Click += aoClicar;
                 return b;
             }
 
-            barra.Controls.Add(CriarBotao("Atualizar", 4, (s, e) => AtualizarLog()));
+            barra.Controls.Add(CriarBotao("Atualizar", 0, (s, e) => AtualizarLog()));
             barra.Controls.Add(CriarBotao("Abrir pasta", 104, (s, e) => AbrirPastaDoLog()));
-            barra.Controls.Add(CriarBotao("Limpar", 204, (s, e) => { Logger.Limpar(); AtualizarLog(); }));
+            barra.Controls.Add(CriarBotao("Limpar", 208, (s, e) => { Logger.Limpar(); AtualizarLog(); }));
             return barra;
         }
 
@@ -714,7 +810,16 @@ namespace YoutubeDownloaderCS
 
             // Segunda e última tentativa, agora com o cookies.txt gerado pela janela de login.
             status.Report("Baixando com a sua conta...");
-            await Task.Run(() => YtDlpDownloader.Baixar(url, saveFileDialog1.FileName, opcao.YtDlpFormato, opcao.ExtrairAudioMp3, progresso, status, token));
+            try
+            {
+                await Task.Run(() => YtDlpDownloader.Baixar(url, saveFileDialog1.FileName, opcao.YtDlpFormato, opcao.ExtrairAudioMp3, progresso, status, token));
+            }
+            catch (LoginYoutubeNecessarioException)
+            {
+                // Já logamos e o YouTube continua recusando: insistir no login não resolveria.
+                throw new Exception("O YouTube recusou este vídeo mesmo com a sua conta. " +
+                                    "Ele pode exigir uma conta com acesso ao conteúdo (idade, região ou canal pago).");
+            }
         }
 
         // Garante que o arquivo saia com a extensão certa mesmo se o usuário apagá-la no diálogo.
@@ -789,6 +894,13 @@ namespace YoutubeDownloaderCS
         private void Form1_Load(object sender, EventArgs e)
         {
 
+        }
+
+        // O DWM só aceita o atributo depois que a janela tem handle, por isso não fica no construtor.
+        protected override void OnHandleCreated(EventArgs e)
+        {
+            base.OnHandleCreated(e);
+            Tema.BarraDeTituloEscura(this);
         }
     }
 }

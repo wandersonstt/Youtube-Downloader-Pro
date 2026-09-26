@@ -18,19 +18,16 @@ namespace YoutubeDownloaderCS
         // app: quando instalado em Program Files, os processos filhos do WebView2 rodam em
         // sandbox de baixa integridade e não conseguem gravar lá nem com o app elevado
         // ("O Microsoft Edge não pode ler e gravar no diretório de dados").
-        public static string PastaDados
-        {
-            get
-            {
-                string pasta = Path.Combine(
-                    Environment.GetFolderPath(Environment.SpecialFolder.LocalApplicationData),
-                    "YoutubeDownloaderPro");
-                Directory.CreateDirectory(pasta);
-                return pasta;
-            }
-        }
+        // Só monta o caminho: criar a pasta aqui faria I/O (e poderia lançar) a cada leitura,
+        // inclusive dentro de blocos catch que apenas querem citar o caminho na mensagem.
+        // Quem cria é CriarPastaDados(), chamado uma vez na inicialização.
+        public static string PastaDados => Path.Combine(
+            Environment.GetFolderPath(Environment.SpecialFolder.LocalApplicationData),
+            "YoutubeDownloaderPro");
 
         public static string CaminhoNaPastaDados(string arquivo) => Path.Combine(PastaDados, arquivo);
+
+        public static void CriarPastaDados() => Directory.CreateDirectory(PastaDados);
 
         // Aceita texto colado com lixo em volta ("olha esse vídeo https://... valeu") e extrai só o link.
         public static string ExtrairLink(string texto)

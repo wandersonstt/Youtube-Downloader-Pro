@@ -168,7 +168,23 @@ namespace YoutubeDownloaderCS
                 !LoginYoutube.PastaPerfil.StartsWith(Util.PastaApp, StringComparison.OrdinalIgnoreCase));
             Verificar("cookies do login ficam fora da pasta do app",
                 !LoginYoutube.CaminhoCookies.StartsWith(Util.PastaApp, StringComparison.OrdinalIgnoreCase));
-            Verificar("pasta de dados é gravável", Directory.Exists(Util.PastaDados));
+            // Directory.Exists não provaria nada: é escrever de verdade que reproduz o bug.
+            bool gravavel;
+            try
+            {
+                Util.CriarPastaDados();
+                string teste = Util.CaminhoNaPastaDados("teste-escrita.tmp");
+                File.WriteAllText(teste, "x");
+                File.Delete(teste);
+                gravavel = true;
+            }
+            catch { gravavel = false; }
+            Verificar("pasta de dados aceita escrita", gravavel);
+
+            Verificar("Firefox é tentado antes dos Chromium",
+                new List<string>(YtDlpDownloader.NavegadoresParaTentar(null))[0] == "firefox");
+            Verificar("Chromium é reconhecido e Firefox não",
+                YtDlpDownloader.EhChromium("brave") && !YtDlpDownloader.EhChromium("firefox"));
         }
 
         // Mesmo regex usado para mover a barra de progresso no modo Universal.
@@ -278,6 +294,14 @@ namespace YoutubeDownloaderCS
                     if (c.Bounds.IntersectsWith(abas.Bounds)) { sobrepoe = true; culpado = c.Name; }
                 }
                 Verificar($"abas não sobrepõem nenhum controle{(sobrepoe ? $" (sobrepondo: {culpado})" : "")}", !sobrepoe);
+
+                // O layout é posicionado por cálculo; um erro de conta empurra controles para
+                // fora da janela, onde o usuário simplesmente não os vê.
+                string estourando = "";
+                foreach (System.Windows.Forms.Control c in form.Controls)
+                    if (c.Right > form.ClientSize.Width || c.Left < 0) estourando = c.Name;
+                Verificar($"nenhum controle estoura a largura da janela{(estourando != "" ? $" ({estourando})" : "")}",
+                    estourando == "");
                 Verificar("abas cabem dentro da janela", abas.Bottom <= form.ClientSize.Height);
                 Verificar("janela alta o bastante para o painel", form.ClientSize.Height > abas.Top + 100);
             }

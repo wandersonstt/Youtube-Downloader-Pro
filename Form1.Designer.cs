@@ -21,11 +21,11 @@
             btnBaixar = new Button();
             picThumbnail = new PictureBox();
             label1 = new Label();
-            cmbQualidade = new ComboBox();
+            cmbQualidade = new ComboEscuro();
             btnAtualizar = new Button();
             btnSobre = new Button();
             lblStatus = new Label();
-            progressBar1 = new ProgressBar();
+            progressBar1 = new BarraProgresso();
             lblPorcentagem = new Label();
             saveFileDialog1 = new SaveFileDialog();
             folderBrowserDialog1 = new FolderBrowserDialog();
@@ -204,11 +204,11 @@
         private System.Windows.Forms.Button btnBaixar;
         private System.Windows.Forms.PictureBox picThumbnail;
         private System.Windows.Forms.Label label1;
-        private System.Windows.Forms.ComboBox cmbQualidade;
+        private ComboEscuro cmbQualidade;
         private System.Windows.Forms.Button btnAtualizar;
         private System.Windows.Forms.Button btnSobre;
         private System.Windows.Forms.Label lblStatus;
-        private System.Windows.Forms.ProgressBar progressBar1;
+        private BarraProgresso progressBar1;
         private System.Windows.Forms.Label lblPorcentagem;
         private System.Windows.Forms.SaveFileDialog saveFileDialog1;
         private System.Windows.Forms.FolderBrowserDialog folderBrowserDialog1;

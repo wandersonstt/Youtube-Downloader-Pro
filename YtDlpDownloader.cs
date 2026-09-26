@@ -38,7 +38,14 @@ namespace YoutubeDownloaderCS
             ["Fixup"] = "Finalizando arquivo...",
         };
 
-        private static readonly string[] NavegadoresSuportados = { "chrome", "edge", "brave", "firefox", "opera", "vivaldi", "chromium" };
+        // O Firefox vem primeiro de propósito: é o único que ainda entrega cookies no Windows.
+        // Os demais são Chromium e usam App-Bound Encryption, que o yt-dlp não consegue abrir.
+        private static readonly string[] NavegadoresSuportados = { "firefox", "chrome", "edge", "brave", "opera", "vivaldi", "chromium" };
+
+        private static readonly string[] NavegadoresChromium = { "chrome", "edge", "brave", "opera", "vivaldi", "chromium" };
+
+        internal static bool EhChromium(string navegador) =>
+            NavegadoresChromium.Contains(navegador, StringComparer.OrdinalIgnoreCase);
 
         // Monta os argumentos do yt-dlp. Separado para poder ser validado por teste.
         // --no-playlist é obrigatório: sem ele, uma URL de vídeo que carregue "&list=" faz o
@@ -93,11 +100,12 @@ namespace YoutubeDownloaderCS
         private static string Capitalizar(string texto) =>
             string.IsNullOrEmpty(texto) ? texto : char.ToUpper(texto[0]) + texto.Substring(1);
 
-        // Cookies gravados pela janela de login do app; ou, como alternativa manual, um
-        // cookies.txt (formato Netscape) largado na pasta do programa.
+        // Um cookies.txt largado na pasta do programa vem primeiro, como o README promete: é a
+        // saída de quem precisa sobrepor uma sessão ruim do app. Depois, os cookies gravados
+        // pela janela de login.
         internal static string? ArquivoCookiesManual()
         {
-            foreach (var caminho in new[] { LoginYoutube.CaminhoCookies, Util.CaminhoNaPastaApp("cookies.txt") })
+            foreach (var caminho in new[] { Util.CaminhoNaPastaApp("cookies.txt"), LoginYoutube.CaminhoCookies })
                 if (File.Exists(caminho)) return caminho;
             return null;
         }
@@ -190,7 +198,13 @@ namespace YoutubeDownloaderCS
             // expirou: vasculhar navegadores só gastaria ~20s para falhar. Pede login de novo.
             if (cookiesManuais != null)
             {
-                Logger.Info("Cookies do app não bastaram (sessão expirada); pedindo login novamente.");
+                Logger.Info($"Cookies de {cookiesManuais} não bastaram; pedindo login novamente.");
+
+                // Sem apagar, toda tentativa futura repetiria esta execução condenada antes de
+                // chegar no login. O cookies.txt colocado à mão pelo usuário não é nosso: fica.
+                if (string.Equals(cookiesManuais, LoginYoutube.CaminhoCookies, StringComparison.OrdinalIgnoreCase))
+                    try { File.Delete(cookiesManuais); } catch (Exception ex) { Logger.Erro("Falha ao descartar cookies expirados", ex); }
+
                 throw new LoginYoutubeNecessarioException(ExtrairErroRelevante(resultado.Erro), orientacoes);
             }
 
@@ -198,9 +212,17 @@ namespace YoutubeDownloaderCS
             // navegador onde o usuário já esteja logado.
             Logger.Info("YouTube exigiu login; tentando novamente com cookies do navegador.");
 
+            bool chromiumJaRecusou = false;
+
             foreach (var navegador in NavegadoresParaTentar(Preferencias.NavegadorCookies))
             {
                 token.ThrowIfCancellationRequested();
+
+                // App-Bound Encryption vale para todos os Chromium de uma vez, mas não afeta o
+                // Firefox (que usa NSS). Pular só os Chromium mantém alcançável o único
+                // navegador que ainda funciona no Windows.
+                if (chromiumJaRecusou && EhChromium(navegador)) continue;
+
                 statusEtapa?.Report($"YouTube pediu login: tentando cookies do {navegador}...");
 
                 var comCookies = Executar(ytDlpPath, MontarArgumentos(url, destino, formato, extrairMp3, ffmpegPath, navegador), destino, progresso, statusEtapa, token);
@@ -217,9 +239,7 @@ namespace YoutubeDownloaderCS
                 var orientacao = ExplicarFalhaDeCookies(motivo, navegador);
                 if (orientacao != null && !orientacoes.Contains(orientacao)) orientacoes.Add(orientacao);
 
-                // App-Bound Encryption: se um Chromium recusou a descriptografia, todos os
-                // outros vão recusar igual. Não adianta percorrer a lista inteira.
-                if (motivo.Contains("DPAPI", StringComparison.OrdinalIgnoreCase)) break;
+                if (motivo.Contains("DPAPI", StringComparison.OrdinalIgnoreCase)) chromiumJaRecusou = true;
             }
 
             // Nenhum navegador entregou os cookies (nos Chromium modernos isso é esperado:
