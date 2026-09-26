@@ -14,6 +14,24 @@ namespace YoutubeDownloaderCS
 
         public static string CaminhoNaPastaApp(string arquivo) => Path.Combine(PastaApp, arquivo);
 
+        // Pasta de dados do usuário (sessão do YouTube, cookies). Não pode ser a pasta do
+        // app: quando instalado em Program Files, os processos filhos do WebView2 rodam em
+        // sandbox de baixa integridade e não conseguem gravar lá nem com o app elevado
+        // ("O Microsoft Edge não pode ler e gravar no diretório de dados").
+        public static string PastaDados
+        {
+            get
+            {
+                string pasta = Path.Combine(
+                    Environment.GetFolderPath(Environment.SpecialFolder.LocalApplicationData),
+                    "YoutubeDownloaderPro");
+                Directory.CreateDirectory(pasta);
+                return pasta;
+            }
+        }
+
+        public static string CaminhoNaPastaDados(string arquivo) => Path.Combine(PastaDados, arquivo);
+
         // Aceita texto colado com lixo em volta ("olha esse vídeo https://... valeu") e extrai só o link.
         public static string ExtrairLink(string texto)
         {

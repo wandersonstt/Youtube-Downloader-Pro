@@ -160,6 +160,15 @@ namespace YoutubeDownloaderCS
 
             string sessao = LoginYoutube.LinhaNetscape(".youtube.com", "/", true, DateTime.MinValue, "SID", "y");
             Verificar("cookie de sessão usa validade 0", sessao.Split('\t')[4] == "0");
+
+            // O WebView2 roda os processos filhos em sandbox de baixa integridade: se o perfil
+            // ficar na pasta do app (Program Files), ele falha com "não pode ler e gravar no
+            // diretório de dados" mesmo com o programa elevado.
+            Verificar("perfil do login fica fora da pasta do app",
+                !LoginYoutube.PastaPerfil.StartsWith(Util.PastaApp, StringComparison.OrdinalIgnoreCase));
+            Verificar("cookies do login ficam fora da pasta do app",
+                !LoginYoutube.CaminhoCookies.StartsWith(Util.PastaApp, StringComparison.OrdinalIgnoreCase));
+            Verificar("pasta de dados é gravável", Directory.Exists(Util.PastaDados));
         }
 
         // Mesmo regex usado para mover a barra de progresso no modo Universal.

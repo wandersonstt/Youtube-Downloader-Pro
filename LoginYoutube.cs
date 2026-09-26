@@ -24,8 +24,8 @@ namespace YoutubeDownloaderCS
         private readonly Label lblInstrucao = new();
         private bool exportou;
 
-        public static string PastaPerfil => Util.CaminhoNaPastaApp("sessao-youtube");
-        public static string CaminhoCookies => Util.CaminhoNaPastaApp("cookies.txt");
+        public static string PastaPerfil => Util.CaminhoNaPastaDados("sessao-youtube");
+        public static string CaminhoCookies => Util.CaminhoNaPastaDados("cookies.txt");
 
         // Cookies que só existem quando há uma sessão autenticada do Google/YouTube.
         private static readonly string[] CookiesDeSessao = { "SAPISID", "SID", "__Secure-3PSID" };
@@ -77,8 +77,13 @@ namespace YoutubeDownloaderCS
             }
             catch (Exception ex)
             {
-                Logger.Erro("Falha ao abrir a janela de login (WebView2)", ex);
-                MessageBox.Show("Não foi possível abrir a janela de login: " + ex.Message, "Erro",
+                Logger.Erro($"Falha ao abrir a janela de login (WebView2). Perfil: {PastaPerfil}", ex);
+
+                string detalhe;
+                try { detalhe = "Runtime do WebView2: " + CoreWebView2Environment.GetAvailableBrowserVersionString(); }
+                catch { detalhe = "O runtime do WebView2 não está instalado. Instale-o em https://go.microsoft.com/fwlink/p/?LinkId=2124703"; }
+
+                MessageBox.Show($"Não foi possível abrir a janela de login.\n\n{ex.Message}\n\n{detalhe}", "Erro",
                                 MessageBoxButtons.OK, MessageBoxIcon.Error);
                 DialogResult = DialogResult.Abort;
                 Close();

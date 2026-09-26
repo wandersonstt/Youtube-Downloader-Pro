@@ -93,12 +93,13 @@ namespace YoutubeDownloaderCS
         private static string Capitalizar(string texto) =>
             string.IsNullOrEmpty(texto) ? texto : char.ToUpper(texto[0]) + texto.Substring(1);
 
-        // Alternativa para quem não consegue usar os cookies do navegador: basta colocar um
-        // cookies.txt (formato Netscape) na pasta do programa.
+        // Cookies gravados pela janela de login do app; ou, como alternativa manual, um
+        // cookies.txt (formato Netscape) largado na pasta do programa.
         internal static string? ArquivoCookiesManual()
         {
-            string caminho = Util.CaminhoNaPastaApp("cookies.txt");
-            return File.Exists(caminho) ? caminho : null;
+            foreach (var caminho in new[] { LoginYoutube.CaminhoCookies, Util.CaminhoNaPastaApp("cookies.txt") })
+                if (File.Exists(caminho)) return caminho;
+            return null;
         }
 
         // O YouTube passou a exigir login para parte dos vídeos ("Sign in to confirm you're not
@@ -183,10 +184,19 @@ namespace YoutubeDownloaderCS
             if (!PareceBloqueioDeLogin(resultado.Erro))
                 throw new Exception(ExtrairErroRelevante(resultado.Erro));
 
+            var orientacoes = new List<string>();
+
+            // Se a sessão do próprio app já foi usada e mesmo assim o YouTube pediu login, ela
+            // expirou: vasculhar navegadores só gastaria ~20s para falhar. Pede login de novo.
+            if (cookiesManuais != null)
+            {
+                Logger.Info("Cookies do app não bastaram (sessão expirada); pedindo login novamente.");
+                throw new LoginYoutubeNecessarioException(ExtrairErroRelevante(resultado.Erro), orientacoes);
+            }
+
             // O YouTube exigiu autenticação: repete o download reaproveitando os cookies de um
             // navegador onde o usuário já esteja logado.
             Logger.Info("YouTube exigiu login; tentando novamente com cookies do navegador.");
-            var orientacoes = new List<string>();
 
             foreach (var navegador in NavegadoresParaTentar(Preferencias.NavegadorCookies))
             {
@@ -206,6 +216,10 @@ namespace YoutubeDownloaderCS
 
                 var orientacao = ExplicarFalhaDeCookies(motivo, navegador);
                 if (orientacao != null && !orientacoes.Contains(orientacao)) orientacoes.Add(orientacao);
+
+                // App-Bound Encryption: se um Chromium recusou a descriptografia, todos os
+                // outros vão recusar igual. Não adianta percorrer a lista inteira.
+                if (motivo.Contains("DPAPI", StringComparison.OrdinalIgnoreCase)) break;
             }
 
             // Nenhum navegador entregou os cookies (nos Chromium modernos isso é esperado:

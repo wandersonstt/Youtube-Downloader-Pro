@@ -69,6 +69,8 @@ Isso existe porque os navegadores baseados em Chromium (Chrome, Brave, Edge) pas
 
 Se preferir, também é possível exportar um **`cookies.txt`** (formato Netscape, via extensão de navegador) para a pasta de instalação — ele tem prioridade sobre tudo.
 
+A sessão e os cookies ficam em `%LOCALAPPDATA%\YoutubeDownloaderPro`, **não** na pasta de instalação: o WebView2 roda seus processos filhos em sandbox de baixa integridade e não consegue gravar em `C:\Program Files` nem com o app elevado.
+
 > O `cookies.txt` e a pasta `sessao-youtube` contêm a sua sessão logada. Não compartilhe esses arquivos.
 
 ### Diagnóstico
