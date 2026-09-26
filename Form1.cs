@@ -168,9 +168,9 @@ namespace YoutubeDownloaderCS
 
                 if (!isYoutube)
                 {
-                    tituloVideoAtual = "Download Externo";
                     lblStatus.Text = "Link externo detectado (Universal)";
                     picThumbnail.Image = null;
+                    tituloVideoAtual = await Task.Run(() => YtDlpDownloader.ObterTitulo(url, TimeSpan.FromSeconds(15))) ?? "Download Externo";
                     PopularOpcoesUniversais();
                     btnBaixar.Enabled = true;
                     return;
@@ -225,9 +225,11 @@ namespace YoutubeDownloaderCS
                 // ==========================================
                 Debug.WriteLine("YoutubeExplode falhou: " + ex.Message);
 
-                tituloVideoAtual = "Vídeo (Modo Universal)";
                 lblStatus.Text = "Modo de compatibilidade ativado (yt-dlp)";
                 cmbQualidade.Items.Clear();
+                tituloVideoAtual = videoAtual?.Title
+                    ?? await Task.Run(() => YtDlpDownloader.ObterTitulo(url, TimeSpan.FromSeconds(15)))
+                    ?? "Vídeo (Modo Universal)";
                 PopularOpcoesUniversais();
                 btnBaixar.Enabled = true;
 
@@ -349,7 +351,10 @@ namespace YoutubeDownloaderCS
                 if (opcao.IsGeneric)
                 {
                     string extPadrao = opcao.ExtrairAudioMp3 ? "mp3" : "mp4";
-                    saveFileDialog1.FileName = opcao.ExtrairAudioMp3 ? "audio_download" : "video_download";
+                    string nomePadrao = !string.IsNullOrWhiteSpace(tituloVideoAtual) && tituloVideoAtual != "Download Externo" && tituloVideoAtual != "Vídeo (Modo Universal)"
+                        ? LimparNome(tituloVideoAtual)
+                        : (opcao.ExtrairAudioMp3 ? "audio_download" : "video_download");
+                    saveFileDialog1.FileName = nomePadrao;
                     saveFileDialog1.Filter = $"{extPadrao.ToUpper()}|*.{extPadrao}";
                     saveFileDialog1.InitialDirectory = Preferencias.UltimaPasta;
                     if (saveFileDialog1.ShowDialog() == DialogResult.OK)

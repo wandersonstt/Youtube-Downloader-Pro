@@ -23,6 +23,41 @@ namespace YoutubeDownloaderCS
             ["Fixup"] = "Finalizando arquivo...",
         };
 
+        // Consulta o título real do vídeo sem baixar nada, para nomear o arquivo corretamente
+        // mesmo quando o YoutubeExplode falha (modo Universal / sites externos).
+        public static string? ObterTitulo(string url, TimeSpan timeout)
+        {
+            string ytDlpPath = Path.Combine(Environment.CurrentDirectory, "yt-dlp.exe");
+            if (!File.Exists(ytDlpPath)) return null;
+
+            var startInfo = new ProcessStartInfo
+            {
+                FileName = ytDlpPath,
+                Arguments = $"--print \"%(title)s\" --skip-download --no-warnings \"{url}\"",
+                UseShellExecute = false,
+                CreateNoWindow = true,
+                RedirectStandardOutput = true,
+                RedirectStandardError = true
+            };
+
+            try
+            {
+                using var process = new Process { StartInfo = startInfo };
+                process.Start();
+                string titulo = process.StandardOutput.ReadToEnd().Trim();
+                if (!process.WaitForExit((int)timeout.TotalMilliseconds))
+                {
+                    try { process.Kill(true); } catch { }
+                    return null;
+                }
+                return process.ExitCode == 0 && !string.IsNullOrWhiteSpace(titulo) ? titulo : null;
+            }
+            catch
+            {
+                return null;
+            }
+        }
+
         public static void Baixar(string url, string destino, string? formato, bool extrairMp3, IProgress<double>? progresso, IProgress<string>? statusEtapa, CancellationToken token)
         {
             string ytDlpPath = Path.Combine(Environment.CurrentDirectory, "yt-dlp.exe");
