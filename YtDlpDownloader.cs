@@ -63,12 +63,20 @@ namespace YoutubeDownloaderCS
         public static void Baixar(string url, string destino, string? formato, bool extrairMp3, IProgress<double>? progresso, IProgress<string>? statusEtapa, CancellationToken token)
         {
             string ytDlpPath = Path.Combine(Environment.CurrentDirectory, "yt-dlp.exe");
-            if (!File.Exists(ytDlpPath)) throw new Exception("yt-dlp.exe não encontrado.");
+            if (!File.Exists(ytDlpPath))
+            {
+                Logger.Erro("yt-dlp.exe não encontrado em " + ytDlpPath);
+                throw new Exception("yt-dlp.exe não encontrado.");
+            }
             string ffmpegPath = Path.Combine(Environment.CurrentDirectory, "ffmpeg.exe");
+            if (!File.Exists(ffmpegPath))
+                Logger.Erro("ffmpeg.exe não encontrado em " + ffmpegPath);
 
             string args = extrairMp3
                 ? $"-f bestaudio -x --audio-format mp3 --newline --ffmpeg-location \"{ffmpegPath}\" -o \"{destino}\" \"{url}\""
                 : $"-f \"{formato ?? "bestvideo+bestaudio/best"}\" --merge-output-format mp4 --newline --ffmpeg-location \"{ffmpegPath}\" -o \"{destino}\" \"{url}\"";
+
+            Logger.Info($"Iniciando download: {ytDlpPath} {args}");
 
             var startInfo = new ProcessStartInfo
             {
@@ -126,6 +134,7 @@ namespace YoutubeDownloaderCS
                     var inativoHa = DateTime.UtcNow - new DateTime(Interlocked.Read(ref ultimaAtividadeTicks), DateTimeKind.Utc);
                     if (inativoHa > TimeSpan.FromSeconds(45) && File.Exists(destino) && new FileInfo(destino).Length > 0)
                     {
+                        Logger.Info($"Processo travado após concluir (sem atividade por {inativoHa.TotalSeconds:F0}s), mas '{destino}' já existe. Encerrando e considerando sucesso.");
                         finalizadoPorInatividade = true;
                         try { process.Kill(true); } catch { }
                         break;
@@ -135,7 +144,12 @@ namespace YoutubeDownloaderCS
 
             token.ThrowIfCancellationRequested();
             if (finalizadoPorInatividade) return;
-            if (process.ExitCode != 0) throw new Exception(erroCompleto);
+            if (process.ExitCode != 0)
+            {
+                Logger.Erro($"yt-dlp saiu com código {process.ExitCode}. Erro: {erroCompleto}");
+                throw new Exception(erroCompleto);
+            }
+            Logger.Info($"Download concluído: {destino}");
         }
     }
 }

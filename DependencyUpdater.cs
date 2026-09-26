@@ -1,6 +1,5 @@
 using System;
 using System.Collections.Generic;
-using System.Diagnostics;
 using System.IO;
 using System.IO.Compression;
 using System.Net.Http;
@@ -53,7 +52,7 @@ namespace YoutubeDownloaderCS
             }
             catch (Exception ex)
             {
-                Debug.WriteLine("Falha ao consultar release mais recente do yt-dlp: " + ex.Message);
+                Logger.Erro("Falha ao consultar release mais recente do yt-dlp", ex);
             }
             return UrlYtDlpFallback;
         }
@@ -89,7 +88,7 @@ namespace YoutubeDownloaderCS
             }
             catch (Exception ex)
             {
-                Debug.WriteLine($"Falha ao baixar {arquivoVersao}: {ex}");
+                Logger.Erro($"Falha ao baixar {arquivoVersao}", ex);
                 if (!File.Exists(caminhoDestino))
                     return $"Componente {Path.GetFileName(caminhoDestino)} ausente. Falha ao baixar: {ex.Message}";
             }

@@ -101,6 +101,7 @@ namespace YoutubeDownloaderCS
             }
             catch (Exception ex)
             {
+                Logger.Erro("Erro na inicialização", ex);
                 MessageBox.Show("Erro na inicialização: " + ex.Message);
             }
             finally
@@ -123,7 +124,7 @@ namespace YoutubeDownloaderCS
                 loading.AtualizarMensagem("Verificação concluída!");
                 await Task.Delay(1000);
             }
-            catch (Exception ex) { MessageBox.Show("Erro: " + ex.Message); }
+            catch (Exception ex) { Logger.Erro("Erro ao verificar atualizações", ex); MessageBox.Show("Erro: " + ex.Message); }
             finally { loading.Close(); TravarInterface(false); }
         }
 
@@ -157,6 +158,7 @@ namespace YoutubeDownloaderCS
 
             if (string.IsNullOrWhiteSpace(url)) return;
 
+            Logger.Info($"Analisar clicado: {url}");
             var loading = new TelaCarregamento("Analisando link...");
             loading.Show(this); Application.DoEvents();
 
@@ -223,7 +225,7 @@ namespace YoutubeDownloaderCS
                 // ==========================================
                 // SOLUÇÃO 3: FALLBACK (PLANO B) ADICIONADO AQUI
                 // ==========================================
-                Debug.WriteLine("YoutubeExplode falhou: " + ex.Message);
+                Logger.Erro("YoutubeExplode falhou ao analisar link, caindo para modo Universal", ex);
 
                 lblStatus.Text = "Modo de compatibilidade ativado (yt-dlp)";
                 cmbQualidade.Items.Clear();
@@ -328,7 +330,7 @@ namespace YoutubeDownloaderCS
             }
             catch (Exception ex)
             {
-                Debug.WriteLine("Erro ao adicionar capa: " + ex.Message);
+                Logger.Erro("Erro ao adicionar capa", ex);
             }
             finally
             {
@@ -379,6 +381,7 @@ namespace YoutubeDownloaderCS
                         }
                         catch (Exception ex)
                         {
+                            Logger.Erro("Download Universal falhou", ex);
                             if (ex.Message.Contains("DRM")) MessageBox.Show("Site protegido (DRM).", "Aviso", MessageBoxButtons.OK, MessageBoxIcon.Warning);
                             else MessageBox.Show("Erro: " + ex.Message);
                             AdicionarHistorico("ERRO", "Download Universal falhou");
@@ -518,6 +521,7 @@ namespace YoutubeDownloaderCS
             }
             catch (Exception ex)
             {
+                Logger.Erro("Download falhou", ex);
                 MessageBox.Show("Erro: " + ex.Message);
                 AdicionarHistorico("ERRO", ex.Message);
             }
