@@ -44,18 +44,30 @@ namespace YoutubeDownloaderCS
             try
             {
                 using var process = new Process { StartInfo = startInfo };
+                var saida = new System.Text.StringBuilder();
+                // Lê stdout/stderr de forma assíncrona: ReadToEnd() bloqueava sem respeitar o
+                // timeout, e o stderr nunca era drenado (podia travar o processo se enchesse o buffer).
+                process.OutputDataReceived += (s, e) => { if (!string.IsNullOrEmpty(e.Data)) saida.AppendLine(e.Data); };
+                process.ErrorDataReceived += (s, e) => { };
+
                 process.Start();
                 process.StandardInput.Close(); // evita que o processo trave esperando input que nunca virá
-                string titulo = process.StandardOutput.ReadToEnd().Trim();
+                process.BeginOutputReadLine();
+                process.BeginErrorReadLine();
+
                 if (!process.WaitForExit((int)timeout.TotalMilliseconds))
                 {
+                    Logger.Erro($"ObterTitulo: yt-dlp não respondeu em {timeout.TotalSeconds}s para '{url}'");
                     try { process.Kill(true); } catch { }
                     return null;
                 }
+
+                string titulo = saida.ToString().Trim();
                 return process.ExitCode == 0 && !string.IsNullOrWhiteSpace(titulo) ? titulo : null;
             }
-            catch
+            catch (Exception ex)
             {
+                Logger.Erro("ObterTitulo falhou", ex);
                 return null;
             }
         }
