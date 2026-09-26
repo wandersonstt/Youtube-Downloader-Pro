@@ -83,10 +83,12 @@ namespace YoutubeDownloaderCS
 
             using var process = new Process { StartInfo = startInfo };
             string erroCompleto = "";
+            long ultimaAtividadeTicks = DateTime.UtcNow.Ticks;
 
             process.OutputDataReceived += (s, e) =>
             {
                 if (string.IsNullOrEmpty(e.Data)) return;
+                Interlocked.Exchange(ref ultimaAtividadeTicks, DateTime.UtcNow.Ticks);
 
                 var matchProgresso = RegexProgresso.Match(e.Data);
                 if (matchProgresso.Success && double.TryParse(matchProgresso.Groups[1].Value, NumberStyles.Float, CultureInfo.InvariantCulture, out double pct))
@@ -99,19 +101,40 @@ namespace YoutubeDownloaderCS
                 if (matchEtapa.Success && NomesEtapas.TryGetValue(matchEtapa.Groups[1].Value, out var nomeEtapa))
                     statusEtapa?.Report(nomeEtapa);
             };
-            process.ErrorDataReceived += (s, e) => { if (!string.IsNullOrEmpty(e.Data)) erroCompleto += e.Data + "\n"; };
+            process.ErrorDataReceived += (s, e) =>
+            {
+                if (string.IsNullOrEmpty(e.Data)) return;
+                Interlocked.Exchange(ref ultimaAtividadeTicks, DateTime.UtcNow.Ticks);
+                erroCompleto += e.Data + "\n";
+            };
 
             process.Start();
             process.StandardInput.Close(); // evita que o processo trave esperando input que nunca virá
             process.BeginOutputReadLine();
             process.BeginErrorReadLine();
 
+            bool finalizadoPorInatividade = false;
             using (token.Register(() => { try { if (!process.HasExited) process.Kill(true); } catch { } }))
             {
-                process.WaitForExit();
+                // yt-dlp/ffmpeg às vezes trava numa etapa de limpeza sem importância mesmo
+                // com o arquivo final já pronto. Se não sair nenhum log novo por um tempo E
+                // o arquivo de destino já existir, considera concluído e encerra o processo.
+                while (!process.WaitForExit(2000))
+                {
+                    if (token.IsCancellationRequested) break;
+
+                    var inativoHa = DateTime.UtcNow - new DateTime(Interlocked.Read(ref ultimaAtividadeTicks), DateTimeKind.Utc);
+                    if (inativoHa > TimeSpan.FromSeconds(45) && File.Exists(destino) && new FileInfo(destino).Length > 0)
+                    {
+                        finalizadoPorInatividade = true;
+                        try { process.Kill(true); } catch { }
+                        break;
+                    }
+                }
             }
 
             token.ThrowIfCancellationRequested();
+            if (finalizadoPorInatividade) return;
             if (process.ExitCode != 0) throw new Exception(erroCompleto);
         }
     }
