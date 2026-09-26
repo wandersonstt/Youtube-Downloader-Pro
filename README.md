@@ -16,7 +16,8 @@ Aplicativo desktop para Windows que baixa vídeos e playlists do YouTube (e, em 
 - **Cancelamento real** — interrompe o download (e a etapa de capa/conversão) a qualquer momento, sem deixar arquivos parciais corrompidos.
 - **Dependências autogerenciadas** — `ffmpeg.exe` e `yt-dlp.exe` são baixados e mantidos atualizados automaticamente (yt-dlp sempre na última versão publicada, via API do GitHub), sem intervenção do usuário.
 - **Auto-update do próprio aplicativo** — verifica novas versões no GitHub a cada abertura e oferece a atualização.
-- **Histórico de downloads** — painel com o resultado (sucesso, falha, cancelado) de cada item baixado na sessão.
+- **Histórico e log integrados** — abas na própria janela com o resultado de cada download e o log técnico do aplicativo, para diagnóstico sem sair do programa.
+- **Contorno do bloqueio de login do YouTube** — quando o YouTube exige autenticação ("Sign in to confirm you're not a bot"), o app tenta automaticamente reaproveitar os cookies do navegador onde você já está logado.
 
 ## Instalação (usuário final)
 
@@ -53,9 +54,25 @@ O projeto é um WinForms (.NET 10) organizado por responsabilidade:
 | [`Form1.cs`](Form1.cs) | Interface e orquestração dos fluxos de busca/download. |
 | [`DependencyUpdater.cs`](DependencyUpdater.cs) | Verifica e baixa `ffmpeg.exe`/`yt-dlp.exe`, com download atômico e resolução da versão mais recente do yt-dlp via API do GitHub. |
 | [`YtDlpDownloader.cs`](YtDlpDownloader.cs) | Executa o `yt-dlp` no modo Universal, reportando progresso real e suportando cancelamento. |
-| [`Preferencias.cs`](Preferencias.cs) | Persiste a última pasta de destino usada. |
+| [`Preferencias.cs`](Preferencias.cs) | Persiste a última pasta de destino e o navegador usado para cookies. |
+| [`Logger.cs`](Logger.cs) | Registra eventos e erros em `log.txt` (exibido na aba **Log** do app). |
+| [`Util.cs`](Util.cs) | Extração de link colado e sanitização de nome de arquivo. |
+| [`Selftest.cs`](Selftest.cs) | Testes automatizados das regras que não dependem de rede nem de interação. |
 | [`TelaCarregamento.cs`](TelaCarregamento.cs) / [`TelaDoacao.cs`](TelaDoacao.cs) | Janelas auxiliares (loading e doação). |
-| [`Program.cs`](Program.cs) | Ponto de entrada da aplicação. |
+| [`Program.cs`](Program.cs) | Ponto de entrada, tratamento global de erros e diagnóstico inicial. |
+
+### Diagnóstico
+
+O app grava um `log.txt` na própria pasta de instalação, visível na aba **Log** da janela principal (com botões para atualizar, abrir a pasta e limpar). Cada inicialização registra versão, se está elevado como administrador, a pasta de trabalho e o estado de `ffmpeg.exe`/`yt-dlp.exe` — o suficiente para diagnosticar a maioria dos problemas sem reproduzir o caso.
+
+### Testes
+
+```bash
+dotnet build
+dotnet bin/Debug/net10.0-windows/YoutubeDownloaderCS.dll --selftest
+```
+
+Cobre a montagem dos argumentos do `yt-dlp` (inclusive a presença obrigatória de `--no-playlist`), a leitura do progresso e das etapas, a detecção do bloqueio de login do YouTube, a sanitização de nomes de arquivo, a extração de links e o layout da janela. Os testes rodam pela DLL porque o `.exe` exige elevação.
 
 ### Fluxo de download
 

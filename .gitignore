@@ -1,12 +1,12 @@
-# Ignorar pastas de compilação (onde ficam os executáveis pesados)
+# Ignorar pastas de compilaï¿½ï¿½o (onde ficam os executï¿½veis pesados)
 [Bb]in/
 [Oo]bj/
 
-# Ignorar arquivos temporários do Visual Studio
+# Ignorar arquivos temporï¿½rios do Visual Studio
 .vs/
 *.user
 
-# Ignorar o executável e o ffmpeg se estiverem na raiz
+# Ignorar o executï¿½vel e o ffmpeg se estiverem na raiz
 *.exe
 *.dll
 ffmpeg.exe
@@ -16,3 +16,12 @@ ffmpeg.zip
 *.zip
 *.7z
 *.rar
+
+# Backups que o Visual Studio cria ao atualizar pacotes NuGet
+*.Backup.tmp
+
+# Arquivos gerados em tempo de execuÃ§Ã£o pelo prÃ³prio app
+log.txt
+preferencias.txt
+ffmpeg_version.txt
+ytdlp_version.txt
