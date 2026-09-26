@@ -25,3 +25,7 @@ log.txt
 preferencias.txt
 ffmpeg_version.txt
 ytdlp_version.txt
+
+# NUNCA versionar: contêm a sessão logada do usuário
+cookies.txt
+sessao-youtube/

@@ -9,6 +9,7 @@ using System.Threading.Tasks;
 using System.Windows.Forms;
 using System.Collections.Generic;
 using System.Diagnostics;
+using System.Text;
 using YoutubeExplode;
 using YoutubeExplode.Videos.Streams;
 using YoutubeExplode.Converter;
@@ -490,12 +491,13 @@ namespace YoutubeDownloaderCS
                         lblStatus.Text = "Baixando (Modo Universal)...";
                         var progUniversal = new Progress<double>(p => { progressBar1.Value = Math.Clamp((int)(p * 100), 0, 100); lblPorcentagem.Text = $"{progressBar1.Value}%"; });
                         var statusUniversal = new Progress<string>(texto => lblStatus.Text = texto);
+                        // Usa a URL analisada (e não o texto atual da caixa, que o usuário
+                        // pode ter editado depois de clicar em Analisar).
+                        string urlDownload = string.IsNullOrWhiteSpace(urlAnalisada) ? Util.ExtrairLink(txtUrl.Text) : urlAnalisada;
+
                         try
                         {
-                            // Usa a URL analisada (e não o texto atual da caixa, que o usuário
-                            // pode ter editado depois de clicar em Analisar).
-                            string urlDownload = string.IsNullOrWhiteSpace(urlAnalisada) ? Util.ExtrairLink(txtUrl.Text) : urlAnalisada;
-                            await Task.Run(() => YtDlpDownloader.Baixar(urlDownload, saveFileDialog1.FileName, opcao.YtDlpFormato, opcao.ExtrairAudioMp3, progUniversal, statusUniversal, token));
+                            await BaixarUniversalAsync(urlDownload, opcao, progUniversal, statusUniversal, token);
                             lblStatus.Text = "Concluído!";
                             AdicionarHistorico("SUCESSO (Uni)", Path.GetFileName(saveFileDialog1.FileName));
                             MessageBox.Show("Download Concluído!");
@@ -677,6 +679,42 @@ namespace YoutubeDownloaderCS
                 _cts?.Dispose();
                 _cts = null; // sem zerar, o botão Cancelar chamaria Cancel() num objeto já descartado
             }
+        }
+
+        // Baixa no modo Universal e, se o YouTube exigir login, oferece a janela de login
+        // embutida e repete o download uma vez com os cookies recém-obtidos.
+        private async Task BaixarUniversalAsync(string url, OpcaoDownload opcao, IProgress<double> progresso, IProgress<string> status, CancellationToken token)
+        {
+            try
+            {
+                await Task.Run(() => YtDlpDownloader.Baixar(url, saveFileDialog1.FileName, opcao.YtDlpFormato, opcao.ExtrairAudioMp3, progresso, status, token));
+                return;
+            }
+            catch (LoginYoutubeNecessarioException ex)
+            {
+                Logger.Info("Download exigiu login; oferecendo a janela de login do app.");
+
+                var texto = new StringBuilder("O YouTube está exigindo login para baixar este vídeo.\n\n");
+                texto.AppendLine("Os navegadores Chrome, Brave e Edge não permitem mais que programas leiam seus cookies, ")
+                     .AppendLine("então o programa tem a própria tela de login.")
+                     .AppendLine()
+                     .Append("Deseja entrar na sua conta do YouTube agora?");
+
+                if (MessageBox.Show(texto.ToString(), "Login necessário", MessageBoxButtons.YesNo, MessageBoxIcon.Question) != DialogResult.Yes)
+                {
+                    string extra = ex.Orientacoes.Count > 0 ? "\n\n" + string.Join("\n", ex.Orientacoes) : "";
+                    throw new Exception("Download cancelado: o vídeo exige login." + extra);
+                }
+
+                status.Report("Aguardando login...");
+                using var janela = new LoginYoutube();
+                if (janela.ShowDialog(this) != DialogResult.OK)
+                    throw new Exception("Login não concluído. Tente novamente e entre na sua conta do YouTube.");
+            }
+
+            // Segunda e última tentativa, agora com o cookies.txt gerado pela janela de login.
+            status.Report("Baixando com a sua conta...");
+            await Task.Run(() => YtDlpDownloader.Baixar(url, saveFileDialog1.FileName, opcao.YtDlpFormato, opcao.ExtrairAudioMp3, progresso, status, token));
         }
 
         // Garante que o arquivo saia com a extensão certa mesmo se o usuário apagá-la no diálogo.

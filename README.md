@@ -17,7 +17,7 @@ Aplicativo desktop para Windows que baixa vídeos e playlists do YouTube (e, em 
 - **Dependências autogerenciadas** — `ffmpeg.exe` e `yt-dlp.exe` são baixados e mantidos atualizados automaticamente (yt-dlp sempre na última versão publicada, via API do GitHub), sem intervenção do usuário.
 - **Auto-update do próprio aplicativo** — verifica novas versões no GitHub a cada abertura e oferece a atualização.
 - **Histórico e log integrados** — abas na própria janela com o resultado de cada download e o log técnico do aplicativo, para diagnóstico sem sair do programa.
-- **Contorno do bloqueio de login do YouTube** — quando o YouTube exige autenticação ("Sign in to confirm you're not a bot"), o app tenta automaticamente reaproveitar os cookies do navegador onde você já está logado.
+- **Login embutido para vídeos protegidos** — quando o YouTube exige autenticação, o app abre a própria tela de login (via WebView2) e guarda a sessão, sem depender dos cookies do navegador.
 
 ## Instalação (usuário final)
 
@@ -63,11 +63,13 @@ O projeto é um WinForms (.NET 10) organizado por responsabilidade:
 
 ### "O YouTube está exigindo login"
 
-O YouTube passou a bloquear parte dos vídeos com a mensagem *"Sign in to confirm you're not a bot"*. Nesse caso o app tenta automaticamente reaproveitar os cookies do navegador, e o que costuma resolver é:
+O YouTube bloqueia parte dos vídeos com a mensagem *"Sign in to confirm you're not a bot"*, e só libera para quem está autenticado. Quando isso acontece, **o app abre a própria tela de login**: você entra na sua conta uma vez, a sessão fica salva e os downloads seguintes funcionam sozinhos.
 
-1. **Feche o navegador completamente** (todas as janelas) e clique em Baixar de novo — com o navegador aberto, o Windows trava o arquivo de cookies e o download falha com *"Could not copy cookie database"*.
-2. Chrome e Edge recentes protegem os cookies de um jeito que impede a leitura (*"Failed to decrypt with DPAPI"*), mesmo fechados. Nesses casos, use o **Firefox** logado no YouTube.
-3. Alternativa para qualquer navegador: exporte um arquivo **`cookies.txt`** (formato Netscape, via extensão de navegador) e coloque-o na pasta de instalação do programa — ele passa a ser usado automaticamente.
+Isso existe porque os navegadores baseados em Chromium (Chrome, Brave, Edge) passaram a proteger os cookies com *App-Bound Encryption* — nenhum programa externo consegue mais lê-los no Windows (*"Failed to decrypt with DPAPI"*). O app ainda tenta os cookies do navegador antes (funciona com Firefox), e só abre a tela de login se não conseguir.
+
+Se preferir, também é possível exportar um **`cookies.txt`** (formato Netscape, via extensão de navegador) para a pasta de instalação — ele tem prioridade sobre tudo.
+
+> O `cookies.txt` e a pasta `sessao-youtube` contêm a sua sessão logada. Não compartilhe esses arquivos.
 
 ### Diagnóstico
 

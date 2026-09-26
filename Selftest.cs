@@ -20,6 +20,7 @@ namespace YoutubeDownloaderCS
             TestarDeteccaoBloqueioLogin();
             TestarOrdemNavegadores();
             TestarMensagensDeErro();
+            TestarFormatoCookies();
             TestarParsingProgresso();
             TestarParsingEtapa();
             TestarLimparNome();
@@ -132,6 +133,33 @@ namespace YoutubeDownloaderCS
 
             string comArquivo = YtDlpDownloader.MontarArgumentos("https://x/v", "a.mp4", null, false, "ff.exe", null, @"C:\App\cookies.txt");
             Verificar("cookies.txt tem prioridade sobre navegador", comArquivo.Contains("--cookies \"C:\\App\\cookies.txt\"") && !comArquivo.Contains("--cookies-from-browser"));
+        }
+
+        // O yt-dlp rejeita o arquivo inteiro se o formato Netscape estiver errado.
+        private static void TestarFormatoCookies()
+        {
+            Console.WriteLine("\n[Formato do cookies.txt (Netscape)]");
+
+            var expira = new DateTime(2027, 1, 1, 0, 0, 0, DateTimeKind.Utc);
+            string linha = LoginYoutube.LinhaNetscape(".youtube.com", "/", true, expira, "SAPISID", "abc123");
+            var campos = linha.Split('\t');
+
+            Verificar("tem exatamente 7 campos separados por TAB", campos.Length == 7);
+            Verificar("domínio preservado", campos[0] == ".youtube.com");
+            Verificar("domínio com ponto marca subdomínios como TRUE", campos[1] == "TRUE");
+            Verificar("caminho preservado", campos[2] == "/");
+            Verificar("cookie seguro marcado como TRUE", campos[3] == "TRUE");
+            Verificar("validade em segundos unix", campos[4] == "1798761600");
+            Verificar("nome e valor nas últimas posições", campos[5] == "SAPISID" && campos[6] == "abc123");
+
+            string semPonto = LoginYoutube.LinhaNetscape("www.youtube.com", "", false, expira, "PREF", "x");
+            var camposSemPonto = semPonto.Split('\t');
+            Verificar("domínio sem ponto marca subdomínios como FALSE", camposSemPonto[1] == "FALSE");
+            Verificar("caminho vazio vira /", camposSemPonto[2] == "/");
+            Verificar("cookie não seguro marcado como FALSE", camposSemPonto[3] == "FALSE");
+
+            string sessao = LoginYoutube.LinhaNetscape(".youtube.com", "/", true, DateTime.MinValue, "SID", "y");
+            Verificar("cookie de sessão usa validade 0", sessao.Split('\t')[4] == "0");
         }
 
         // Mesmo regex usado para mover a barra de progresso no modo Universal.

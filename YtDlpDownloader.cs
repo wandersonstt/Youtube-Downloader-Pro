@@ -10,6 +10,19 @@ using System.Threading;
 
 namespace YoutubeDownloaderCS
 {
+    // O YouTube exigiu autenticação e não há cookies utilizáveis. Quem captura decide como
+    // pedir o login ao usuário (a interface abre a janela embutida do app).
+    internal sealed class LoginYoutubeNecessarioException : Exception
+    {
+        public IReadOnlyList<string> Orientacoes { get; }
+
+        public LoginYoutubeNecessarioException(string detalheTecnico, IReadOnlyList<string> orientacoes)
+            : base(detalheTecnico)
+        {
+            Orientacoes = orientacoes;
+        }
+    }
+
     // Executa yt-dlp.exe para o "Modo Universal", reportando progresso real e suportando cancelamento.
     internal static class YtDlpDownloader
     {
@@ -195,19 +208,10 @@ namespace YoutubeDownloaderCS
                 if (orientacao != null && !orientacoes.Contains(orientacao)) orientacoes.Add(orientacao);
             }
 
-            var mensagem = new StringBuilder("O YouTube está exigindo login para baixar este vídeo.\n\n");
-            if (orientacoes.Count > 0)
-            {
-                mensagem.AppendLine("Como resolver:");
-                for (int i = 0; i < orientacoes.Count; i++) mensagem.AppendLine($"{i + 1}. {orientacoes[i]}");
-            }
-            else
-            {
-                mensagem.AppendLine("Faça login no YouTube pelo navegador, feche o navegador completamente e tente de novo.");
-            }
-            mensagem.AppendLine().Append("Detalhe técnico: ").Append(ExtrairErroRelevante(resultado.Erro));
-
-            throw new Exception(mensagem.ToString());
+            // Nenhum navegador entregou os cookies (nos Chromium modernos isso é esperado:
+            // o App-Bound Encryption impede a leitura). Quem trata é a interface, abrindo a
+            // janela de login própria do app.
+            throw new LoginYoutubeNecessarioException(ExtrairErroRelevante(resultado.Erro), orientacoes);
         }
 
         // O arquivo só conta como resultado deste download se foi gravado depois que
