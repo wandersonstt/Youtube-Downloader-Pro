@@ -361,7 +361,7 @@ namespace YoutubeDownloaderCS
                     {
                         Preferencias.UltimaPasta = Path.GetDirectoryName(saveFileDialog1.FileName) ?? Preferencias.UltimaPasta;
                         lblStatus.Text = "Baixando (Modo Universal)...";
-                        var progUniversal = new Progress<double>(p => { progressBar1.Value = Math.Min((int)(p * 100), 100); lblPorcentagem.Text = $"{progressBar1.Value}%"; });
+                        var progUniversal = new Progress<double>(p => { progressBar1.Value = Math.Clamp((int)(p * 100), 0, 100); lblPorcentagem.Text = $"{progressBar1.Value}%"; });
                         var statusUniversal = new Progress<string>(texto => lblStatus.Text = texto);
                         try
                         {
@@ -461,7 +461,7 @@ namespace YoutubeDownloaderCS
                     {
                         Preferencias.UltimaPasta = Path.GetDirectoryName(saveFileDialog1.FileName) ?? Preferencias.UltimaPasta;
                         lblStatus.Text = "Baixando...";
-                        var prog = new Progress<double>(p => { progressBar1.Value = Math.Min((int)(p * 100), 100); lblPorcentagem.Text = $"{progressBar1.Value}%"; });
+                        var prog = new Progress<double>(p => { progressBar1.Value = Math.Clamp((int)(p * 100), 0, 100); lblPorcentagem.Text = $"{progressBar1.Value}%"; });
 
                         if (opcao.EhAudio)
                         {
