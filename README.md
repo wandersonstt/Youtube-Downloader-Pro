@@ -61,6 +61,14 @@ O projeto é um WinForms (.NET 10) organizado por responsabilidade:
 | [`TelaCarregamento.cs`](TelaCarregamento.cs) / [`TelaDoacao.cs`](TelaDoacao.cs) | Janelas auxiliares (loading e doação). |
 | [`Program.cs`](Program.cs) | Ponto de entrada, tratamento global de erros e diagnóstico inicial. |
 
+### "O YouTube está exigindo login"
+
+O YouTube passou a bloquear parte dos vídeos com a mensagem *"Sign in to confirm you're not a bot"*. Nesse caso o app tenta automaticamente reaproveitar os cookies do navegador, e o que costuma resolver é:
+
+1. **Feche o navegador completamente** (todas as janelas) e clique em Baixar de novo — com o navegador aberto, o Windows trava o arquivo de cookies e o download falha com *"Could not copy cookie database"*.
+2. Chrome e Edge recentes protegem os cookies de um jeito que impede a leitura (*"Failed to decrypt with DPAPI"*), mesmo fechados. Nesses casos, use o **Firefox** logado no YouTube.
+3. Alternativa para qualquer navegador: exporte um arquivo **`cookies.txt`** (formato Netscape, via extensão de navegador) e coloque-o na pasta de instalação do programa — ele passa a ser usado automaticamente.
+
 ### Diagnóstico
 
 O app grava um `log.txt` na própria pasta de instalação, visível na aba **Log** da janela principal (com botões para atualizar, abrir a pasta e limpar). Cada inicialização registra versão, se está elevado como administrador, a pasta de trabalho e o estado de `ffmpeg.exe`/`yt-dlp.exe` — o suficiente para diagnosticar a maioria dos problemas sem reproduzir o caso.

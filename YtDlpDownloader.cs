@@ -31,9 +31,11 @@ namespace YoutubeDownloaderCS
         // --no-playlist é obrigatório: sem ele, uma URL de vídeo que carregue "&list=" faz o
         // yt-dlp baixar a playlist inteira (e um Mix/Rádio do YouTube é infinito), gravando
         // vídeo após vídeo por cima do mesmo arquivo de destino.
-        internal static string MontarArgumentos(string url, string destino, string? formato, bool extrairMp3, string ffmpegPath, string? navegadorCookies = null)
+        internal static string MontarArgumentos(string url, string destino, string? formato, bool extrairMp3, string ffmpegPath, string? navegadorCookies = null, string? arquivoCookies = null)
         {
-            string cookies = string.IsNullOrWhiteSpace(navegadorCookies) ? "" : $"--cookies-from-browser {navegadorCookies} ";
+            string cookies = !string.IsNullOrWhiteSpace(arquivoCookies) ? $"--cookies \"{arquivoCookies}\" "
+                           : !string.IsNullOrWhiteSpace(navegadorCookies) ? $"--cookies-from-browser {navegadorCookies} "
+                           : "";
             string comum = $"{cookies}--no-playlist --newline --ffmpeg-location \"{ffmpegPath}\" -o \"{destino}\" \"{url}\"";
             return extrairMp3
                 ? $"-f bestaudio -x --audio-format mp3 {comum}"
@@ -42,6 +44,49 @@ namespace YoutubeDownloaderCS
 
         internal static string MontarArgumentosTitulo(string url) =>
             $"--print \"%(title)s\" --skip-download --no-playlist --playlist-items 1 --no-warnings \"{url}\"";
+
+        // O yt-dlp emite vários WARNING antes do ERROR de verdade (ex: o aviso sobre runtime
+        // JavaScript). Mostrar a primeira linha fazia o app exibir o aviso errado como causa.
+        internal static string ExtrairErroRelevante(string saidaDeErro)
+        {
+            var linhas = saidaDeErro.Split('\n').Select(l => l.Trim()).Where(l => l.Length > 0).ToList();
+            if (linhas.Count == 0) return "";
+
+            var erro = linhas.FirstOrDefault(l => l.StartsWith("ERROR:", StringComparison.OrdinalIgnoreCase));
+            if (erro != null) return erro;
+
+            var naoAviso = linhas.FirstOrDefault(l => !l.StartsWith("WARNING:", StringComparison.OrdinalIgnoreCase));
+            return naoAviso ?? linhas[0];
+        }
+
+        // Traduz as falhas conhecidas de leitura de cookies em instruções que o usuário
+        // consegue seguir. São os três casos reais: navegador aberto travando o banco,
+        // criptografia nova do Chrome, e navegador não instalado.
+        internal static string? ExplicarFalhaDeCookies(string erro, string navegador)
+        {
+            if (erro.Contains("Could not copy", StringComparison.OrdinalIgnoreCase))
+                return $"Feche o {Capitalizar(navegador)} completamente (todas as janelas) e clique em Baixar novamente.";
+
+            if (erro.Contains("DPAPI", StringComparison.OrdinalIgnoreCase))
+                return $"O {Capitalizar(navegador)} passou a proteger os cookies de um jeito que impede a leitura. " +
+                       "Use o Firefox (faça login no YouTube nele) ou exporte um arquivo cookies.txt para a pasta do programa.";
+
+            if (erro.Contains("could not find", StringComparison.OrdinalIgnoreCase))
+                return null; // navegador não instalado: não é problema, apenas passa para o próximo
+
+            return null;
+        }
+
+        private static string Capitalizar(string texto) =>
+            string.IsNullOrEmpty(texto) ? texto : char.ToUpper(texto[0]) + texto.Substring(1);
+
+        // Alternativa para quem não consegue usar os cookies do navegador: basta colocar um
+        // cookies.txt (formato Netscape) na pasta do programa.
+        internal static string? ArquivoCookiesManual()
+        {
+            string caminho = Util.CaminhoNaPastaApp("cookies.txt");
+            return File.Exists(caminho) ? caminho : null;
+        }
 
         // O YouTube passou a exigir login para parte dos vídeos ("Sign in to confirm you're not
         // a bot"). Nesses casos o download só funciona reaproveitando os cookies do navegador.
@@ -115,15 +160,21 @@ namespace YoutubeDownloaderCS
             if (!File.Exists(ffmpegPath))
                 Logger.Erro("ffmpeg.exe não encontrado em " + ffmpegPath);
 
-            var resultado = Executar(ytDlpPath, MontarArgumentos(url, destino, formato, extrairMp3, ffmpegPath), destino, progresso, statusEtapa, token);
+            // Se o usuário deixou um cookies.txt na pasta, ele já vale na primeira tentativa.
+            string? cookiesManuais = ArquivoCookiesManual();
+            if (cookiesManuais != null) Logger.Info($"Usando cookies manuais de {cookiesManuais}");
+
+            var resultado = Executar(ytDlpPath, MontarArgumentos(url, destino, formato, extrairMp3, ffmpegPath, null, cookiesManuais), destino, progresso, statusEtapa, token);
             if (resultado.Sucesso) return;
 
             if (!PareceBloqueioDeLogin(resultado.Erro))
-                throw new Exception(resultado.Erro);
+                throw new Exception(ExtrairErroRelevante(resultado.Erro));
 
             // O YouTube exigiu autenticação: repete o download reaproveitando os cookies de um
             // navegador onde o usuário já esteja logado.
             Logger.Info("YouTube exigiu login; tentando novamente com cookies do navegador.");
+            var orientacoes = new List<string>();
+
             foreach (var navegador in NavegadoresParaTentar(Preferencias.NavegadorCookies))
             {
                 token.ThrowIfCancellationRequested();
@@ -136,13 +187,27 @@ namespace YoutubeDownloaderCS
                     Preferencias.NavegadorCookies = navegador;
                     return;
                 }
-                Logger.Info($"Cookies do {navegador} não funcionaram: {PrimeiraLinha(comCookies.Erro)}");
+
+                string motivo = ExtrairErroRelevante(comCookies.Erro);
+                Logger.Info($"Cookies do {navegador} não funcionaram: {motivo}");
+
+                var orientacao = ExplicarFalhaDeCookies(motivo, navegador);
+                if (orientacao != null && !orientacoes.Contains(orientacao)) orientacoes.Add(orientacao);
             }
 
-            throw new Exception(
-                "O YouTube exigiu login para este vídeo e não foi possível usar os cookies do navegador.\n\n" +
-                "Tente: abrir o vídeo logado no navegador, fechar o navegador completamente e baixar de novo.\n\n" +
-                "Detalhe técnico: " + PrimeiraLinha(resultado.Erro));
+            var mensagem = new StringBuilder("O YouTube está exigindo login para baixar este vídeo.\n\n");
+            if (orientacoes.Count > 0)
+            {
+                mensagem.AppendLine("Como resolver:");
+                for (int i = 0; i < orientacoes.Count; i++) mensagem.AppendLine($"{i + 1}. {orientacoes[i]}");
+            }
+            else
+            {
+                mensagem.AppendLine("Faça login no YouTube pelo navegador, feche o navegador completamente e tente de novo.");
+            }
+            mensagem.AppendLine().Append("Detalhe técnico: ").Append(ExtrairErroRelevante(resultado.Erro));
+
+            throw new Exception(mensagem.ToString());
         }
 
         // O arquivo só conta como resultado deste download se foi gravado depois que
@@ -156,12 +221,6 @@ namespace YoutubeDownloaderCS
                 return info.Length > 0 && info.LastWriteTime >= inicio.AddSeconds(-2);
             }
             catch { return false; }
-        }
-
-        private static string PrimeiraLinha(string texto)
-        {
-            var linha = texto.Split('\n').FirstOrDefault(l => !string.IsNullOrWhiteSpace(l));
-            return (linha ?? texto).Trim();
         }
 
         private static ProcessStartInfo CriarStartInfo(string exe, string args) => new()

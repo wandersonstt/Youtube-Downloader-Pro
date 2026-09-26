@@ -19,6 +19,7 @@ namespace YoutubeDownloaderCS
             TestarArgumentosTitulo();
             TestarDeteccaoBloqueioLogin();
             TestarOrdemNavegadores();
+            TestarMensagensDeErro();
             TestarParsingProgresso();
             TestarParsingEtapa();
             TestarLimparNome();
@@ -100,6 +101,37 @@ namespace YoutubeDownloaderCS
             Verificar("não repete o preferido na lista", comPreferido.FindAll(n => n == "brave").Count == 1);
             Verificar("cobre os navegadores principais",
                 semPreferido.Contains("chrome") && semPreferido.Contains("edge") && semPreferido.Contains("firefox") && semPreferido.Contains("brave"));
+        }
+
+        // Saídas reais coletadas rodando o yt-dlp na máquina do usuário.
+        private static void TestarMensagensDeErro()
+        {
+            Console.WriteLine("\n[Mensagem de erro mostrada ao usuário]");
+
+            const string saidaReal =
+                "WARNING: [youtube] No supported JavaScript runtime could be found. Only deno is enabled by default\n" +
+                "WARNING: [youtube] No title found in player responses; falling back to title from initial data\n" +
+                "ERROR: [youtube] QQDcOFBLzi4: Sign in to confirm you're not a bot.";
+
+            string relevante = YtDlpDownloader.ExtrairErroRelevante(saidaReal);
+            Verificar("escolhe a linha ERROR, não o WARNING", relevante.StartsWith("ERROR:"));
+            Verificar("não mostra o aviso de runtime JavaScript", !relevante.Contains("JavaScript runtime"));
+            Verificar("só com avisos, ainda devolve algo",
+                !string.IsNullOrWhiteSpace(YtDlpDownloader.ExtrairErroRelevante("WARNING: algo\nWARNING: outro")));
+            Verificar("saída vazia não quebra", YtDlpDownloader.ExtrairErroRelevante("") == "");
+
+            // Os três erros de cookie que realmente aparecem no Windows.
+            string? aberto = YtDlpDownloader.ExplicarFalhaDeCookies("ERROR: Could not copy Chrome cookie database", "brave");
+            Verificar("navegador aberto vira instrução de fechar", aberto != null && aberto.Contains("Feche o Brave"));
+
+            string? dpapi = YtDlpDownloader.ExplicarFalhaDeCookies("ERROR: Failed to decrypt with DPAPI", "chrome");
+            Verificar("proteção do Chrome sugere alternativa", dpapi != null && (dpapi.Contains("Firefox") || dpapi.Contains("cookies.txt")));
+
+            Verificar("navegador não instalado não vira orientação",
+                YtDlpDownloader.ExplicarFalhaDeCookies("ERROR: could not find firefox cookies database", "firefox") == null);
+
+            string comArquivo = YtDlpDownloader.MontarArgumentos("https://x/v", "a.mp4", null, false, "ff.exe", null, @"C:\App\cookies.txt");
+            Verificar("cookies.txt tem prioridade sobre navegador", comArquivo.Contains("--cookies \"C:\\App\\cookies.txt\"") && !comArquivo.Contains("--cookies-from-browser"));
         }
 
         // Mesmo regex usado para mover a barra de progresso no modo Universal.
