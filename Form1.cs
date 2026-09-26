@@ -341,10 +341,20 @@ namespace YoutubeDownloaderCS
 
         private async void btnBaixar_Click(object sender, EventArgs e)
         {
-            if (cmbQualidade.SelectedItem == null) return;
+            if (cmbQualidade.SelectedItem == null)
+            {
+                Logger.Info("Baixar clicado, mas nenhuma opção de qualidade selecionada.");
+                return;
+            }
             OpcaoDownload opcao = (OpcaoDownload)cmbQualidade.SelectedItem!;
+            Logger.Info($"Baixar clicado: opção='{opcao.Nome}', pastaAtual='{Environment.CurrentDirectory}'");
 
-            if (!File.Exists("ffmpeg.exe")) { MessageBox.Show("FFmpeg ausente. Atualize o programa."); return; }
+            if (!File.Exists("ffmpeg.exe"))
+            {
+                Logger.Erro($"ffmpeg.exe não encontrado em '{Path.Combine(Environment.CurrentDirectory, "ffmpeg.exe")}'");
+                MessageBox.Show("FFmpeg ausente. Atualize o programa.");
+                return;
+            }
 
             _cts = new CancellationTokenSource(); var token = _cts.Token;
             TravarInterface(true); btnCancelar.Enabled = true;
