@@ -36,6 +36,7 @@ namespace YoutubeDownloaderCS
                 Arguments = $"--print \"%(title)s\" --skip-download --no-warnings \"{url}\"",
                 UseShellExecute = false,
                 CreateNoWindow = true,
+                RedirectStandardInput = true,
                 RedirectStandardOutput = true,
                 RedirectStandardError = true
             };
@@ -44,6 +45,7 @@ namespace YoutubeDownloaderCS
             {
                 using var process = new Process { StartInfo = startInfo };
                 process.Start();
+                process.StandardInput.Close(); // evita que o processo trave esperando input que nunca virá
                 string titulo = process.StandardOutput.ReadToEnd().Trim();
                 if (!process.WaitForExit((int)timeout.TotalMilliseconds))
                 {
@@ -74,6 +76,7 @@ namespace YoutubeDownloaderCS
                 Arguments = args,
                 UseShellExecute = false,
                 CreateNoWindow = true,
+                RedirectStandardInput = true,
                 RedirectStandardOutput = true,
                 RedirectStandardError = true
             };
@@ -99,6 +102,7 @@ namespace YoutubeDownloaderCS
             process.ErrorDataReceived += (s, e) => { if (!string.IsNullOrEmpty(e.Data)) erroCompleto += e.Data + "\n"; };
 
             process.Start();
+            process.StandardInput.Close(); // evita que o processo trave esperando input que nunca virá
             process.BeginOutputReadLine();
             process.BeginErrorReadLine();
 

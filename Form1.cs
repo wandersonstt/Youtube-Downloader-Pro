@@ -299,6 +299,7 @@ namespace YoutubeDownloaderCS
                     Arguments = args,
                     UseShellExecute = false,
                     CreateNoWindow = true,
+                    RedirectStandardInput = true,
                     RedirectStandardOutput = true,
                     RedirectStandardError = true
                 };
@@ -307,6 +308,7 @@ namespace YoutubeDownloaderCS
                 {
                     if (process != null)
                     {
+                        process.StandardInput.Close(); // evita travar esperando input que nunca virá
                         // Timeout de segurança de 30s OU cancelamento pedido pelo usuário
                         using (var cts = CancellationTokenSource.CreateLinkedTokenSource(token))
                         {
