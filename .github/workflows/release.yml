@@ -1,0 +1,66 @@
+name: Release
+
+on:
+  push:
+    tags:
+      - '[0-9]+.[0-9]+.[0-9]+.[0-9]+'
+
+permissions:
+  contents: write
+
+jobs:
+  release:
+    runs-on: windows-latest
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+        with:
+          ref: main
+
+      - name: Extrair versão da tag
+        id: versao
+        shell: bash
+        run: echo "versao=${GITHUB_REF_NAME}" >> "$GITHUB_OUTPUT"
+
+      - name: Setup .NET
+        uses: actions/setup-dotnet@v4
+        with:
+          dotnet-version: '10.0.x'
+
+      - name: Publicar (self-contained win-x64)
+        shell: bash
+        run: |
+          dotnet publish YoutubeDownloaderCS.csproj -c Release -r win-x64 --self-contained true \
+            -p:PublishSingleFile=true -p:IncludeNativeLibrariesForSelfExtract=true \
+            -p:AssemblyVersion=${{ steps.versao.outputs.versao }} -p:FileVersion=${{ steps.versao.outputs.versao }} \
+            -o publish
+
+      - name: Compactar
+        shell: pwsh
+        run: Compress-Archive -Path publish\* -DestinationPath YoutubeDownloaderCS.zip
+
+      - name: Criar Release no GitHub
+        uses: softprops/action-gh-release@v2
+        with:
+          tag_name: ${{ steps.versao.outputs.versao }}
+          name: v${{ steps.versao.outputs.versao }}
+          files: YoutubeDownloaderCS.zip
+          generate_release_notes: true
+
+      - name: Atualizar update.xml
+        shell: bash
+        run: |
+          cat > update.xml <<EOF
+          <?xml version="1.0" encoding="UTF-8"?>
+          <item>
+              <version>${{ steps.versao.outputs.versao }}</version>
+              <url>https://github.com/${{ github.repository }}/releases/download/${{ steps.versao.outputs.versao }}/YoutubeDownloaderCS.zip</url>
+              <changelog>https://github.com/${{ github.repository }}/releases</changelog>
+              <mandatory>false</mandatory>
+          </item>
+          EOF
+          git config user.name "github-actions[bot]"
+          git config user.email "github-actions[bot]@users.noreply.github.com"
+          git add update.xml
+          git commit -m "Atualiza update.xml para versão ${{ steps.versao.outputs.versao }}" || echo "Nada para commitar"
+          git push origin HEAD:main
