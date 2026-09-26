@@ -35,16 +35,24 @@ jobs:
             -p:AssemblyVersion=${{ steps.versao.outputs.versao }} -p:FileVersion=${{ steps.versao.outputs.versao }} \
             -o publish
 
-      - name: Compactar
+      - name: Compactar (versão portátil)
         shell: pwsh
         run: Compress-Archive -Path publish\* -DestinationPath YoutubeDownloaderCS.zip
+
+      - name: Gerar instalador (Inno Setup)
+        uses: Minionguyjpro/Inno-Setup-Action@v1.2.2
+        with:
+          path: installer/setup.iss
+          options: /DMyAppVersion=${{ steps.versao.outputs.versao }}
 
       - name: Criar Release no GitHub
         uses: softprops/action-gh-release@v2
         with:
           tag_name: ${{ steps.versao.outputs.versao }}
           name: v${{ steps.versao.outputs.versao }}
-          files: YoutubeDownloaderCS.zip
+          files: |
+            YoutubeDownloaderCS.zip
+            installer-output/YoutubeDownloaderPro-Setup.exe
           generate_release_notes: true
 
       - name: Atualizar update.xml

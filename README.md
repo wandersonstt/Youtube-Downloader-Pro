@@ -20,12 +20,22 @@ Aplicativo desktop para Windows que baixa vídeos e playlists do YouTube (e, em 
 
 ## Instalação (usuário final)
 
-1. Acesse a aba [Releases](https://github.com/wandersonstt/Youtube-Downloader-Pro/releases) deste repositório.
-2. Baixe o `YoutubeDownloaderCS.zip` da versão mais recente.
-3. Extraia para uma pasta de sua preferência e execute `YoutubeDownloaderCS.exe`.
-4. Na primeira execução, o app baixa automaticamente `ffmpeg.exe` e `yt-dlp.exe` — não é necessário instalar nada manualmente.
+Acesse a aba [Releases](https://github.com/wandersonstt/Youtube-Downloader-Pro/releases) e escolha uma das opções:
 
-> O executável distribuído nas Releases é *self-contained*: não exige o runtime do .NET instalado na máquina do usuário.
+### Opção recomendada: instalador (`YoutubeDownloaderPro-Setup.exe`)
+
+1. Baixe o `YoutubeDownloaderPro-Setup.exe` da versão mais recente.
+2. Execute e siga o assistente (Avançar → Instalar).
+3. O programa é instalado com atalho na Área de Trabalho e no Menu Iniciar, e aparece em "Adicionar ou remover programas" do Windows para desinstalar depois.
+
+### Opção portátil (`YoutubeDownloaderCS.zip`)
+
+1. Baixe o `.zip` da versão mais recente.
+2. Extraia para uma pasta de sua preferência e execute `YoutubeDownloaderCS.exe` — não instala nada no sistema, ideal para pen drive ou uso sem privilégios de administrador.
+
+Em ambos os casos, na primeira execução o app baixa automaticamente `ffmpeg.exe` e `yt-dlp.exe` — não é necessário instalar nada manualmente.
+
+> O executável é *self-contained*: não exige o runtime do .NET instalado na máquina do usuário.
 
 ## Como usar
 
@@ -94,7 +104,7 @@ git tag X.Y.Z.W
 git push origin X.Y.Z.W
 ```
 
-A Action então builda um executável *self-contained*, publica a Release no GitHub com o zip anexado, e atualiza automaticamente o [`update.xml`](update.xml) — que é o arquivo lido pelo AutoUpdater.NET em todos os apps já instalados. Nenhum passo manual é necessário além do `tag`/`push`.
+A Action então builda um executável *self-contained*, gera o `YoutubeDownloaderCS.zip` (portátil) e o `YoutubeDownloaderPro-Setup.exe` (instalador, via [Inno Setup](installer/setup.iss)), publica a Release no GitHub com os dois arquivos anexados, e atualiza automaticamente o [`update.xml`](update.xml) — que é o arquivo lido pelo AutoUpdater.NET em todos os apps já instalados (o auto-update continua usando o `.zip` portátil). Nenhum passo manual é necessário além do `tag`/`push`.
 
 ## Contribuindo
 
