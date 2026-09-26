@@ -357,9 +357,10 @@ namespace YoutubeDownloaderCS
                         Preferencias.UltimaPasta = Path.GetDirectoryName(saveFileDialog1.FileName) ?? Preferencias.UltimaPasta;
                         lblStatus.Text = "Baixando (Modo Universal)...";
                         var progUniversal = new Progress<double>(p => { progressBar1.Value = Math.Min((int)(p * 100), 100); lblPorcentagem.Text = $"{progressBar1.Value}%"; });
+                        var statusUniversal = new Progress<string>(texto => lblStatus.Text = texto);
                         try
                         {
-                            await Task.Run(() => YtDlpDownloader.Baixar(txtUrl.Text, saveFileDialog1.FileName, opcao.YtDlpFormato, opcao.ExtrairAudioMp3, progUniversal, token));
+                            await Task.Run(() => YtDlpDownloader.Baixar(txtUrl.Text, saveFileDialog1.FileName, opcao.YtDlpFormato, opcao.ExtrairAudioMp3, progUniversal, statusUniversal, token));
                             AdicionarHistorico("SUCESSO (Uni)", Path.GetFileName(saveFileDialog1.FileName));
                             MessageBox.Show("Download Concluído!");
                         }
