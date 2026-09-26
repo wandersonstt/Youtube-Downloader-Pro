@@ -12,7 +12,8 @@ namespace YoutubeDownloaderCS
     // Verifica e baixa ffmpeg.exe / yt-dlp.exe, mantendo-os atualizados.
     internal static class DependencyUpdater
     {
-        private static readonly HttpClient httpClient = new HttpClient { Timeout = TimeSpan.FromSeconds(30) };
+        // FFmpeg tem ~200MB: 30s era curto demais para conexões normais.
+        private static readonly HttpClient httpClient = new HttpClient { Timeout = TimeSpan.FromMinutes(10) };
 
         private const string UrlFFmpegZip = "https://github.com/BtbN/FFmpeg-Builds/releases/download/latest/ffmpeg-master-latest-win64-gpl.zip";
         private const string UrlYtDlpApiLatest = "https://api.github.com/repos/yt-dlp/yt-dlp/releases/latest";

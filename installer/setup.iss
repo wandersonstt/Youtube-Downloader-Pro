@@ -18,7 +18,11 @@ AppVersion={#MyAppVersion}
 AppPublisher={#MyAppPublisher}
 AppPublisherURL={#MyAppURL}
 AppSupportURL={#MyAppURL}/issues
-DefaultDirName={autopf}\{#MyAppName}
+; Instala na pasta do usuário (não Program Files): o app baixa/atualiza
+; ffmpeg.exe e yt-dlp.exe na própria pasta de instalação, o que exigiria
+; privilégio de administrador se fosse instalado em Program Files.
+DefaultDirName={localappdata}\Programs\{#MyAppName}
+PrivilegesRequired=lowest
 DefaultGroupName={#MyAppName}
 DisableProgramGroupPage=yes
 OutputDir=..\installer-output
